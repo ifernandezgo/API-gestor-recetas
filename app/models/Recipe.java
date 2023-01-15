@@ -17,6 +17,8 @@ public class Recipe extends BaseModel {
     @OneToOne(cascade = CascadeType.ALL)
     private Type type;
 
+    private String description;
+
     public String getName() {
         return name;
     }
@@ -47,5 +49,13 @@ public class Recipe extends BaseModel {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }
