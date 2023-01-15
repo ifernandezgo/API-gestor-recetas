@@ -1,22 +1,39 @@
 package controllers;
 
+import play.data.Form;
+import play.data.FormFactory;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import views.RecipeResource;
+import models.Recipe;
 
-import java.util.ArrayList;
+import javax.inject.Inject;
 
 public class RecipeController extends Controller {
 
-    ArrayList<String> recetas = new ArrayList<>();
+    @Inject
+    private FormFactory formFactory;
 
     public Result crearReceta(Http.Request req) {
-        recetas.add(req.queryString("name").orElse(""));
-        return Results.created(recetas.toString());
+        Form<RecipeResource> recipeForm = formFactory.form(RecipeResource.class).bindFromRequest(req);
+
+        RecipeResource recipeResource;
+
+        if(recipeForm.hasErrors()) {
+            return Results.badRequest(recipeForm.errorsAsJson());
+        } else {
+            recipeResource = recipeForm.get();
+        }
+
+        Recipe recipe = recipeResource.toModel();
+        recipe.save();
+
+        return Results.created("La receta ha sido creada");
     }
 
-    public Result getAllRecipes() {
+    /*public Result getAllRecipes() {
         return Results.ok(recetas.toString());
-    }
+    }*/
 }

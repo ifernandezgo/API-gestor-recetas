@@ -1,6 +1,7 @@
 package models;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,6 +19,15 @@ public class Recipe extends BaseModel {
     private Type type;
 
     private String description;
+
+    public void addIngredient(Ingredient ingredient) {
+        if(this.ingredients == null) {
+            this.ingredients = new ArrayList<>();
+        }
+
+        this.ingredients.add(ingredient);
+        ingredient.addRecipe(this);
+    }
 
     public String getName() {
         return name;
