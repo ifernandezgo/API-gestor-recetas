@@ -12,11 +12,11 @@ public class Ingredient extends BaseModel {
     private static final Finder<Long, Ingredient> find = new Finder<>(Ingredient.class);
 
     @ManyToMany(mappedBy = "ingredients")
-    private Set<Recipe> recetas;
+    private Set<Recipe> recipes;
     private String name;
 
     public void addRecipe(Recipe recipe) {
-        this.recetas.add(recipe);
+        this.recipes.add(recipe);
     }
 
     public static Ingredient findById(Long id) {
@@ -27,12 +27,12 @@ public class Ingredient extends BaseModel {
         return find.query().where().eq("name", name).findOne();
     }
 
-    public Set<Recipe> getRecetas() {
-        return recetas;
+    public Set<Recipe> getRecipes() {
+        return recipes;
     }
 
-    public void setRecetas(Set<Recipe> recetas) {
-        this.recetas = recetas;
+    public void setRecipes(Set<Recipe> recipes) {
+        this.recipes = recipes;
     }
 
     public String getName() {

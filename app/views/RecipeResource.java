@@ -1,34 +1,36 @@
 package views;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import models.Category;
-import models.Ingredient;
-import models.Recipe;
-import models.Type;
+import io.ebean.annotation.EnumValue;
+import models.*;
 import play.data.validation.Constraints;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 public class RecipeResource {
 
     @JsonProperty("name")
     @Constraints.Required
+    @Constraints.ValidateWith(RecipeValidator.class)
     @NotBlank(message = "El nombre de la receta no puede estar vacío")
     private String name;
 
     @JsonProperty("ingredients")
     @Constraints.Required
-    //@NotBlank(message = "La receta debe contener algún ingrediente")
+    @NotEmpty(message = "La receta debe contener algún ingrediente")
     private List<String> ingredients;
 
     @JsonProperty("categories")
-    private List<Category> categories;
+    @NotEmpty(message = "La receta debe pertenecer a alguna categoría")
+    private List<String> categories;
 
     @JsonProperty("type")
-    //@Constraints.Required
-    //@NotBlank(message = "Se debe indicar el tipo de comida que es la receta: (Desayuno, Comida o Cena)")
-    private Type type;
+    @Constraints.ValidateWith(TypeValidator.class)
+    @Constraints.Required
+    @NotBlank(message = "Se debe indicar el tipo de comida que es la receta: (Desayuno, Comida o Cena)")
+    private String type;
 
     @JsonProperty("description")
     private String description;
@@ -48,6 +50,19 @@ public class RecipeResource {
             recipe.addIngredient(ingredient);
         }
 
+        for (String c : this.categories) {
+            Category category = Category.findByName(c);
+            if (category == null) {
+                category = new Category();
+                category.setName(c);
+            }
+            recipe.addCategory(category);
+        }
+
+        Type t = new Type();
+        Type.TypeEnum tEnum = Type.TypeEnum.valueOf(this.type);
+        t.setType(tEnum);
+        recipe.setType(t);
         return recipe;
     }
 
@@ -67,19 +82,19 @@ public class RecipeResource {
         this.ingredients = ingredients;
     }
 
-    public List<Category> getCategories() {
+    public List<String> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Category> categories) {
+    public void setCategories(List<String> categories) {
         this.categories = categories;
     }
 
-    public Type getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(Type type) {
+    public void setType(String type) {
         this.type = type;
     }
 

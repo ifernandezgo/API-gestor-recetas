@@ -18,13 +18,23 @@ public class Type extends BaseModel {
 
     public enum TypeEnum {
         @EnumValue("Desayuno")
-        DESAYUNO,
+        Desayuno,
 
         @EnumValue("Comida")
-        COMIDA,
+        Comida,
 
         @EnumValue("Cena")
-        CENA
+        Cena
+    }
+
+    public static boolean enumContains(String value) {
+        for(TypeEnum t : TypeEnum.values()) {
+            if(t.name().equals(value)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public Recipe getRecipe() {

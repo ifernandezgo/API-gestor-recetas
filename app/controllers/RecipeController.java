@@ -1,5 +1,6 @@
 package controllers;
 
+import models.Type;
 import play.data.Form;
 import play.data.FormFactory;
 import play.mvc.Controller;
@@ -27,8 +28,16 @@ public class RecipeController extends Controller {
             recipeResource = recipeForm.get();
         }
 
-        Recipe recipe = recipeResource.toModel();
-        recipe.save();
+        /*if(!Type.enumContains(recipeResource.getType())) {
+            return Results.badRequest("El tipo de la receta debe ser: Desayuno, Comida o Cena");
+        }*/
+
+        //if(Recipe.findByName(recipeResource.getName()) != null) {
+          //  return Results.badRequest("Esta receta ya existe por lo que no puede ser creada nuevamente");
+        //} else {
+            Recipe recipe = recipeResource.toModel();
+            recipe.save();
+        //}
 
         return Results.created("La receta ha sido creada");
     }

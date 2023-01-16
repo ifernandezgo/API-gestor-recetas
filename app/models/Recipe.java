@@ -1,5 +1,7 @@
 package models;
 
+import io.ebean.Finder;
+
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,12 +9,14 @@ import java.util.List;
 @Entity
 public class Recipe extends BaseModel {
 
+    private static final Finder<Long, Recipe> find = new Finder<>(Recipe.class);
+
     private String name;
 
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Ingredient> ingredients;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipe")
+    @ManyToMany(cascade = CascadeType.ALL)
     private List<Category> categories;
 
     @OneToOne(cascade = CascadeType.ALL)
@@ -28,6 +32,24 @@ public class Recipe extends BaseModel {
         this.ingredients.add(ingredient);
         ingredient.addRecipe(this);
     }
+
+    public void addCategory(Category category) {
+        if(this.categories == null) {
+            this.categories = new ArrayList<>();
+        }
+
+        this.categories.add(category);
+        category.addRecipe(this);
+    }
+
+    public static Recipe findById(Long id) {
+        return find.byId(id);
+    }
+
+    public static Recipe findByName(String name) {
+        return find.query().where().eq("name", name).findOne();
+    }
+
 
     public String getName() {
         return name;
