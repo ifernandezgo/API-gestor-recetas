@@ -1,5 +1,6 @@
-package models;
+package views;
 
+import models.Recipe;
 import play.data.validation.Constraints;
 import play.libs.F;
 
