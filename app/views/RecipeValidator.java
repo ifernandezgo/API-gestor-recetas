@@ -14,10 +14,6 @@ public class RecipeValidator extends Constraints.Validator<String>{
 
     @Override
     public boolean isValid(String value) {
-        if (Recipe.findByName(value) != null) {
-            return false;
-        }
-
-        return true;
+        return Recipe.findByName(value) == null;
     }
 }

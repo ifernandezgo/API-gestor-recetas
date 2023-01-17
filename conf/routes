@@ -8,6 +8,12 @@
 #Crear una receta
 POST    /recipe     controllers.RecipeController.crearReceta(req: Request)
 
+#Obtener una receta a través de su id
+GET     /recipe/:id     controllers.RecipeController.getRecetaById(req: Request, id: Integer)
+
+#Obtener una receta a través de su nombre
+GET     /recipeByName/:name     controllers.RecipeController.getRecetaByName(req: Request, name: String)
+
 #Obtener todas las recetas
 #GET     /recipes    controllers.RecipeController.getAllRecipes()
 

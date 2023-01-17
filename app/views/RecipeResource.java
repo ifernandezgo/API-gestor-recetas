@@ -1,12 +1,14 @@
 package views;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import io.ebean.annotation.EnumValue;
+import com.fasterxml.jackson.databind.JsonNode;
+import play.libs.Json;
 import models.*;
 import play.data.validation.Constraints;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeResource {
@@ -35,6 +37,21 @@ public class RecipeResource {
     @JsonProperty("description")
     private String description;
 
+    public RecipeResource(Recipe recipe) {
+        super();
+        this.name = recipe.getName();
+        this.ingredients = new ArrayList<>();
+        for(Ingredient i : recipe.getIngredients()) {
+            this.ingredients.add(i.getName());
+        }
+        this.categories = new ArrayList<>();
+        for(Category c : recipe.getCategories()) {
+            this.categories.add(c.getName());
+        }
+        this.type = recipe.getType().getType().name();
+        this.description = recipe.getDescription();
+    }
+
     public Recipe toModel() {
         Recipe recipe = new Recipe();
 
@@ -62,9 +79,13 @@ public class RecipeResource {
         Type t = new Type();
         Type.TypeEnum tEnum = Type.TypeEnum.valueOf(this.type);
         t.setType(tEnum);
+        t.setRecipe(recipe);
         recipe.setType(t);
+
         return recipe;
     }
+
+    public JsonNode toJson() { return Json.toJson(this); }
 
     public String getName() {
         return name;
