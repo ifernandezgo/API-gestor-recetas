@@ -1,5 +1,6 @@
 package controllers;
 
+import io.ebeaninternal.server.util.Str;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -15,7 +16,9 @@ import views.xml.recipe;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RecipeController extends Controller {
@@ -106,16 +109,20 @@ public class RecipeController extends Controller {
         if(req.accepts("application/json")) {
             res = Results.ok(Json.toJson(resources)).as("application/json");
         } else if(req.accepts("application/xml")) {
-            List<Xml> recipesXML = new ArrayList<>();
-
+            List<String> names = new ArrayList<>();
+            Map<String, List<String>> ingredients = new LinkedHashMap<>();
+            Map<String, List<String>> categories = new LinkedHashMap<>();
+            Map<String, String> types = new LinkedHashMap<>();
+            Map<String, String> descriptions = new LinkedHashMap<>();
             for (RecipeResource rp : resources) {
-                recipesXML.add(views.xml.recipe.render(rp.getName(),
-                        rp.getIngredients(),
-                        rp.getCategories(),
-                        rp.getType(),
-                        rp.getDescription()));
+                names.add(rp.getName());
+                ingredients.put(rp.getName(), rp.getIngredients());
+                categories.put(rp.getName(), rp.getCategories());
+                types.put(rp.getName(), rp.getType());
+                descriptions.put(rp.getName(), rp.getDescription());
             }
-            res = Results.ok().as("application/xml");
+            res = Results.ok(views.xml.recipes.render(names, ingredients, categories, types, descriptions))
+                    .as("application/xml");
         } else {
             res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
         }

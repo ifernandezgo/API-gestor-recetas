@@ -1,0 +1,21 @@
+@(names: List[String], ingredients: Map[String, List[String]], categories: Map[String, List[String]], types: Map[String, String], descriptions: Map[String, String])
+<?xml version="1.0" encoding="utf-8" ?>
+<recipes>
+    @for(n <- names) {
+        <recipe>
+            <name>@(n)</name>
+            <ingredients>
+                @for(i <- ingredients.get(n)) {
+                    <ingredient>@(i)</ingredient>
+                }
+            </ingredients>
+            <categories>
+                @for(c <- categories.get(n)) {
+                    <category>@(c)</category>
+                }
+            </categories>
+            <type>@(types.get(n))</type>
+            <description>@(descriptions.get(n))</description>
+        </recipe>
+    }
+</recipes>
