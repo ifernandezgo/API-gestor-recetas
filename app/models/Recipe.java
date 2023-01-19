@@ -50,6 +50,7 @@ public class Recipe extends BaseModel {
         return find.query().where().eq("name", name).findOne();
     }
 
+    public static List<Recipe> findAll() { return find.all(); }
 
     public String getName() {
         return name;

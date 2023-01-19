@@ -14,6 +14,9 @@ GET     /recipe/:id     controllers.RecipeController.getRecetaById(req: Request,
 #Obtener una receta a través de su nombre
 GET     /recipeByName/:name     controllers.RecipeController.getRecetaByName(req: Request, name: String)
 
+#Obtener todas las recetas de la base de datos
+GET     /recipes        controllers.RecipeController.getAllRecipes(req: Request)
+
 #Obtener todas las recetas
 #GET     /recipes    controllers.RecipeController.getAllRecipes()
 
