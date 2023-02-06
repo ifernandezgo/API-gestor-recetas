@@ -1,6 +1,7 @@
 package controllers;
 
 import models.Ingredient;
+import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
 import play.mvc.Controller;
@@ -18,6 +19,26 @@ public class IngredientController extends Controller {
 
     @Inject
     private FormFactory formFactory;
+
+    public Result crearIngrediente(Http.Request req) {
+        Form<IngredientResource> ingredientForm = formFactory.form(IngredientResource.class).bindFromRequest(req);
+
+        IngredientResource ingredientResource = new IngredientResource();
+
+        if(ingredientForm.hasErrors()) {
+            return Results.badRequest(ingredientForm.errorsAsJson());
+        } else {
+            ingredientResource = ingredientForm.get();
+        }
+        Ingredient ingredient = Ingredient.findByName(ingredientResource.getName());
+        if(ingredient != null) {
+            return Results.badRequest("Este ingrediente ya existe por lo que no puede ser creado nuevamente");
+        }
+        ingredient = ingredientResource.toModel();
+        ingredient.save();
+
+        return Results.created("El ingrediente ha sido creado de forma correcta");
+    }
 
     public Result getAllIngredients(Http.Request req) {
         List<Ingredient> ingredients = Ingredient.findAllIngredientsPaged().getList();

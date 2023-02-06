@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
 import models.Recipe;
 import play.libs.Json;
+import play.data.validation.Constraints;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Set;
@@ -14,10 +15,13 @@ public class IngredientResource {
 
     @JsonProperty("ingredient")
     @NotBlank(message = "El nombre del ingrediente no puede estar vacío")
+    @Constraints.Required
     private String name;
 
     @JsonIgnore
     private Set<Recipe> recipes;
+
+    public IngredientResource() {}
 
     public IngredientResource(Ingredient ingredient) {
         super();

@@ -29,6 +29,9 @@ PUT     /recipe/:id     controllers.RecipeController.actualizarReceta(req: Reque
 #Obtener receta por los datos que se envíen
 GET     /recipe     controllers.RecipeController.getByParameters(req: Request)
 
+#Crear ingrediente
+POST        /ingredient     controllers.IngredientController.crearIngrediente(req: Request)
+
 #Obtener todos los ingredientes de la base de datos
 GET     /ingredients        controllers.IngredientController.getAllIngredients(req: Request)
 

@@ -16,9 +16,7 @@ public class Ingredient extends BaseModel {
     private Set<Recipe> recipes;
     private String name;
 
-    public void addRecipe(Recipe recipe) {
-        this.recipes.add(recipe);
-    }
+    public void addRecipe(Recipe recipe) { this.recipes.add(recipe); }
 
     public static Ingredient findById(Long id) {
         return find.byId(id);
