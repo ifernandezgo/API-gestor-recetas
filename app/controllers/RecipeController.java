@@ -1,6 +1,7 @@
 package controllers;
 
-import io.ebeaninternal.server.util.Str;
+import models.Category;
+import models.Ingredient;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -8,10 +9,8 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import play.twirl.api.Xml;
 import views.RecipeResource;
 import models.Recipe;
-import views.xml.recipe;
 
 
 import javax.inject.Inject;
@@ -29,15 +28,18 @@ public class RecipeController extends Controller {
     public Result crearReceta(Http.Request req) {
         Form<RecipeResource> recipeForm = formFactory.form(RecipeResource.class).bindFromRequest(req);
 
-        RecipeResource recipeResource;
+        RecipeResource recipeResource = new RecipeResource();
 
         if(recipeForm.hasErrors()) {
             return Results.badRequest(recipeForm.errorsAsJson());
         } else {
             recipeResource = recipeForm.get();
         }
-
-        Recipe recipe = recipeResource.toModel();
+        Recipe recipe = Recipe.findByName(recipeResource.getName());
+        if(recipe != null) {
+            return Results.badRequest("Esta receta ya existe por lo que no puede ser creada nuevamente");
+        }
+        recipe = recipeResource.toModel();
         recipe.save();
 
         return Results.created("La receta ha sido creada");
@@ -92,9 +94,8 @@ public class RecipeController extends Controller {
         return res;
     }
 
-
     public Result getAllRecipes(Http.Request req) {
-        List<Recipe> recipes = Recipe.findAll();
+        List<Recipe> recipes = Recipe.findAllPaged().getList();
         if(recipes.size() == 0) {
             return Results.notFound("No hay ninguna receta guardada en la base de datos.");
         }
@@ -127,5 +128,70 @@ public class RecipeController extends Controller {
             res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
         }
         return res;
+    }
+
+    public Result deleteById(Http.Request req, Integer id) {
+        Recipe r = Recipe.findById(Long.valueOf(id));
+        if(r == null) {
+            return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
+        }
+
+        r.delete();
+        return Results.ok("La receta con id " + id + " ha sido eliminada correctamente");
+    }
+
+    public Result deleteByName(Http.Request req, String name) {
+        Recipe r = Recipe.findByName(name);
+        if(r == null) {
+            return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
+        }
+
+        r.delete();
+        return Results.ok("La receta con nombre: " + name + " ha sido eliminada correctamente");
+    }
+
+    public Result actualizarReceta(Http.Request req, Integer id) {
+
+        Recipe r = Recipe.findById(Long.valueOf(id));
+        if(r == null) {
+            return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
+        }
+
+        Form<RecipeResource> recipeForm = formFactory.form(RecipeResource.class).bindFromRequest(req);
+
+        RecipeResource recipeResourceReq;
+
+        if(recipeForm.hasErrors()) {
+            return Results.badRequest(recipeForm.errorsAsJson());
+        } else {
+            recipeResourceReq = recipeForm.get();
+        }
+        Recipe recipeRequest = recipeResourceReq.toModel();
+        if(!r.getName().equals(recipeRequest.getName())) {
+            r.setName(recipeRequest.getName());
+        }
+        for(Ingredient i : recipeRequest.getIngredients()) {
+            if (!r.getIngredients().contains(i)) {
+                r.addIngredient(i);
+            }
+        }
+        for(Category c : recipeRequest.getCategories()) {
+            if (!r.getCategories().contains(c)) {
+                r.addCategory(c);
+            }
+        }
+        if(!r.getType().equals(recipeRequest.getType())){
+            r.setType(recipeRequest.getType());
+        }
+        if(!r.getDescription().equals(recipeRequest.getDescription())) {
+            r.setDescription(recipeRequest.getDescription());
+        }
+        r.update();
+
+        return Results.ok("La receta se ha actualizado de forma correcta");
+    }
+
+    public Result getByParameters(Http.Request req) {
+        return Results.ok();
     }
 }

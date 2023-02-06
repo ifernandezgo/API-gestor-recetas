@@ -1,6 +1,7 @@
 package models;
 
 import io.ebean.Finder;
+import io.ebean.PagedList;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -48,9 +49,11 @@ public class Recipe extends BaseModel {
 
     public static Recipe findByName(String name) {
         return find.query().where().eq("name", name).findOne();
-    }
+    } 
 
     public static List<Recipe> findAll() { return find.all(); }
+
+    public static PagedList<Recipe> findAllPaged() { return find.query().where().setMaxRows(10).setFirstRow(0).findPagedList(); }
 
     public String getName() {
         return name;

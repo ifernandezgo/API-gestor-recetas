@@ -15,7 +15,7 @@ public class RecipeResource {
 
     @JsonProperty("name")
     @Constraints.Required
-    @Constraints.ValidateWith(RecipeValidator.class)
+    //@Constraints.ValidateWith(RecipeValidator.class)
     @NotBlank(message = "El nombre de la receta no puede estar vacío")
     private String name;
 
@@ -36,6 +36,8 @@ public class RecipeResource {
 
     @JsonProperty("description")
     private String description;
+
+    public RecipeResource()  {}
 
     public RecipeResource(Recipe recipe) {
         super();

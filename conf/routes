@@ -17,8 +17,17 @@ GET     /recipeByName/:name     controllers.RecipeController.getRecetaByName(req
 #Obtener todas las recetas de la base de datos
 GET     /recipes        controllers.RecipeController.getAllRecipes(req: Request)
 
-#Obtener todas las recetas
-#GET     /recipes    controllers.RecipeController.getAllRecipes()
+#Eliminar una receta por su id
+DELETE      /recipe/:id     controllers.RecipeController.deleteById(req: Request, id: Integer)
+
+#Eliminar una receta por su nombre
+DELETE      /recipeByName/:name   controllers.RecipeController.deleteByName(req: Request, name: String)
+
+#Actualizar receta
+PUT     /recipe/:id     controllers.RecipeController.actualizarReceta(req: Request, id: Integer)
+
+#Obtener receta por los datos que se envíen
+GET     /recipe     controllers.RecipeController.getByParameters(req: Request)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
