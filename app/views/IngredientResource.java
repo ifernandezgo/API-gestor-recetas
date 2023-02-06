@@ -1,5 +1,6 @@
 package views;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
 import models.Ingredient;
@@ -11,11 +12,11 @@ import java.util.Set;
 
 public class IngredientResource {
 
-    @JsonProperty("name")
+    @JsonProperty("ingredient")
     @NotBlank(message = "El nombre del ingrediente no puede estar vacío")
     private String name;
 
-    @JsonProperty("ingredients")
+    @JsonIgnore
     private Set<Recipe> recipes;
 
     public IngredientResource(Ingredient ingredient) {

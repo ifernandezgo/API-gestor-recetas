@@ -29,5 +29,8 @@ PUT     /recipe/:id     controllers.RecipeController.actualizarReceta(req: Reque
 #Obtener receta por los datos que se envíen
 GET     /recipe     controllers.RecipeController.getByParameters(req: Request)
 
+#Obtener todos los ingredientes de la base de datos
+GET     /ingredients        controllers.IngredientController.getAllIngredients(req: Request)
+
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)
