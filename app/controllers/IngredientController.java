@@ -40,6 +40,25 @@ public class IngredientController extends Controller {
         return Results.created("El ingrediente ha sido creado de forma correcta");
     }
 
+    public Result getIngredientById(Http.Request req, Integer id) {
+        Ingredient i = Ingredient.findById(Long.valueOf(id));
+        if(i == null) {
+            return Results.notFound("No existe ningún ingrediente con ese id en la base de datos. Pruebe con otro");
+        }
+
+        Result res;
+        IngredientResource ingredientResource = new IngredientResource(i);
+        if (req.accepts("application/json")) {
+            res = Results.ok(ingredientResource.toJson()).as("application/json");
+        } else if (req.accepts("application/xml")) {
+            res = Results.ok(views.xml.ingredient.render(ingredientResource.getName())).as("application/xml");
+        } else {
+            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+        }
+
+        return res;
+    }
+
     public Result getAllIngredients(Http.Request req) {
         List<Ingredient> ingredients = Ingredient.findAllIngredientsPaged().getList();
         if(ingredients.size() == 0) {

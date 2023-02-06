@@ -1,0 +1,5 @@
+@(name: String)
+<?xml version="1.0" encoding="utf-8" ?>
+<ingredient>
+    <name>@(name)</name>
+</ingredient>

@@ -32,6 +32,9 @@ GET     /recipe     controllers.RecipeController.getByParameters(req: Request)
 #Crear ingrediente
 POST        /ingredient     controllers.IngredientController.crearIngrediente(req: Request)
 
+#Obtener un ingrediente por su id
+GET     /ingredient/:id     controllers.IngredientController.getIngredientById(req: Request, id: Integer)
+
 #Obtener todos los ingredientes de la base de datos
 GET     /ingredients        controllers.IngredientController.getAllIngredients(req: Request)
 
