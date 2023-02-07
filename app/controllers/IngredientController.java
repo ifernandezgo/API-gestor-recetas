@@ -8,6 +8,7 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
+import scala.Int;
 import views.IngredientResource;
 
 import javax.inject.Inject;
@@ -57,6 +58,42 @@ public class IngredientController extends Controller {
         }
 
         return res;
+    }
+
+    public Result deleteIngredientById(Http.Request req, Integer id) {
+        Ingredient i = Ingredient.findById(Long.valueOf(id));
+        if(i == null) {
+            return Results.notFound("No existe ningún ingrediente con ese id en la base de datos. Pruebe con otro");
+        }
+
+        if(i.getRecipes().size() != 0) {
+            return Results.forbidden("El ingrediente no puede ser eliminada porque pertenece a una o varias recetas");
+        } else {
+            i.delete();
+            return Results.ok("El ingrediente con id " + id + " ha sido eliminada correctamente");
+        }
+    }
+
+    public Result updateIngredientById(Http.Request req, Integer id) {
+        Ingredient i = Ingredient.findById(Long.valueOf(id));
+        if(i == null) {
+            return Results.notFound("No existe ningún ingrediente con ese id en la base de datos. Pruebe con otro");
+        }
+
+        Form<IngredientResource> ingredientForm = formFactory.form(IngredientResource.class).bindFromRequest(req);
+
+        IngredientResource ingredientResource = new IngredientResource();
+
+        if(ingredientForm.hasErrors()) {
+            return Results.badRequest(ingredientForm.errorsAsJson());
+        } else {
+            ingredientResource = ingredientForm.get();
+        }
+
+        i.setName(ingredientResource.getName());
+        i.update();
+        return Results.ok("El ingrediente se ha actualizado de forma correcta");
+
     }
 
     public Result getAllIngredients(Http.Request req) {

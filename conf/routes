@@ -35,6 +35,12 @@ POST        /ingredient     controllers.IngredientController.crearIngrediente(re
 #Obtener un ingrediente por su id
 GET     /ingredient/:id     controllers.IngredientController.getIngredientById(req: Request, id: Integer)
 
+#Eliminar ingrediente por su id
+DELETE      /ingredient/:id     controllers.IngredientController.deleteIngredientById(req: Request, id: Integer)
+
+#Actualizar ingrediente por su id
+PUT     /ingredient/:id     controllers.IngredientController.updateIngredientById(req: Request, id: Integer)
+
 #Obtener todos los ingredientes de la base de datos
 GET     /ingredients        controllers.IngredientController.getAllIngredients(req: Request)
 
