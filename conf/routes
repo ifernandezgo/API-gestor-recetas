@@ -11,23 +11,17 @@ POST    /recipe     controllers.RecipeController.crearReceta(req: Request)
 #Obtener una receta a través de su id
 GET     /recipe/:id     controllers.RecipeController.getRecetaById(req: Request, id: Integer)
 
-#Obtener una receta a través de su nombre
-GET     /recipeByName/:name     controllers.RecipeController.getRecetaByName(req: Request, name: String)
-
 #Obtener todas las recetas de la base de datos
 GET     /recipes        controllers.RecipeController.getAllRecipes(req: Request)
 
 #Eliminar una receta por su id
 DELETE      /recipe/:id     controllers.RecipeController.deleteById(req: Request, id: Integer)
 
-#Eliminar una receta por su nombre
-DELETE      /recipeByName/:name   controllers.RecipeController.deleteByName(req: Request, name: String)
-
 #Actualizar receta
 PUT     /recipe/:id     controllers.RecipeController.actualizarReceta(req: Request, id: Integer)
 
 #Obtener receta por los datos que se envíen
-GET     /recipe     controllers.RecipeController.getByParameters(req: Request)
+GET     /recipe     controllers.RecipeController.searchRecipes(req: Request)
 
 #Crear ingrediente
 POST        /ingredient     controllers.IngredientController.crearIngrediente(req: Request)

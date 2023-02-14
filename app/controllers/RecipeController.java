@@ -14,10 +14,7 @@ import models.Recipe;
 
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RecipeController extends Controller {
@@ -47,31 +44,6 @@ public class RecipeController extends Controller {
 
     public Result getRecetaById(Http.Request req, Integer id) {
         Recipe r = Recipe.findById(Long.valueOf(id));
-        if(r == null) {
-            return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
-        }
-
-        Result res;
-        RecipeResource recipeResource = new RecipeResource(r);
-        if(req.accepts("application/json")) {
-            res = Results.ok(recipeResource.toJson()).as("application/json");
-        } else if (req.accepts("application/xml")) {
-            res = Results.ok(views.xml.recipe.render(recipeResource.getName(),
-                            recipeResource.getIngredients(),
-                            recipeResource.getCategories(),
-                            recipeResource.getType(),
-                            recipeResource.getDescription()))
-                    .as("application/xml");
-        } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
-        }
-
-        return res;
-    }
-
-    public Result getRecetaByName(Http.Request req, String name) {
-        System.out.println(name);
-        Recipe r = Recipe.findByName(name);
         if(r == null) {
             return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
         }
@@ -140,16 +112,6 @@ public class RecipeController extends Controller {
         return Results.ok("La receta con id " + id + " ha sido eliminada correctamente");
     }
 
-    public Result deleteByName(Http.Request req, String name) {
-        Recipe r = Recipe.findByName(name);
-        if(r == null) {
-            return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
-        }
-
-        r.delete();
-        return Results.ok("La receta con nombre: " + name + " ha sido eliminada correctamente");
-    }
-
     public Result actualizarReceta(Http.Request req, Integer id) {
 
         Recipe r = Recipe.findById(Long.valueOf(id));
@@ -191,7 +153,7 @@ public class RecipeController extends Controller {
         return Results.ok("La receta se ha actualizado de forma correcta");
     }
 
-    public Result getByParameters(Http.Request req) {
+    public Result searchRecipes(Http.Request req) {
         return Results.ok();
     }
 }
