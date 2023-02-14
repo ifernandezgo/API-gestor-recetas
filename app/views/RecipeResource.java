@@ -8,6 +8,7 @@ import play.data.validation.Constraints;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class RecipeResource {
 
     @JsonProperty("name")
     @Constraints.Required
-    //@Constraints.ValidateWith(RecipeValidator.class)
+    @Constraints.ValidateWith(RecipeValidator.class)
     @NotBlank(message = "El nombre de la receta no puede estar vacío")
     private String name;
 
@@ -34,6 +35,11 @@ public class RecipeResource {
     @NotBlank(message = "Se debe indicar el tipo de comida que es la receta: (Desayuno, Comida o Cena)")
     private String type;
 
+    @JsonProperty("tyme")
+    @Constraints.Required
+    @NotNull(message = "Se debe indicar el tiempo promedio de preparación de la receta")
+    private Integer time;
+
     @JsonProperty("description")
     private String description;
 
@@ -51,6 +57,7 @@ public class RecipeResource {
             this.categories.add(c.getName());
         }
         this.type = recipe.getType().getType().name();
+        this.time = recipe.getTime();
         this.description = recipe.getDescription();
     }
 
@@ -59,6 +66,7 @@ public class RecipeResource {
 
         recipe.setName(this.name);
         recipe.setDescription(this.description);
+        recipe.setTime(this.time);
 
         for (String i : this.ingredients) {
             Ingredient ingredient = Ingredient.findByName(i);
@@ -78,11 +86,15 @@ public class RecipeResource {
             recipe.addCategory(category);
         }
 
-        Type t = new Type();
-        Type.TypeEnum tEnum = Type.TypeEnum.valueOf(this.type);
-        t.setType(tEnum);
-        t.setRecipe(recipe);
-        recipe.setType(t);
+        Type t = Type.findByName(this.type);
+        if(t == null) {
+            t = new Type();
+            Type.TypeEnum tEnum = Type.TypeEnum.valueOf(this.type);
+            t.setType(tEnum);
+            t.save();
+        }
+        t.addRecipe(recipe);
+        System.out.println(recipe);
 
         return recipe;
     }
@@ -119,6 +131,14 @@ public class RecipeResource {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
     }
 
     public String getDescription() {

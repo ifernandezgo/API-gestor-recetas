@@ -32,11 +32,11 @@ public class RecipeController extends Controller {
         } else {
             recipeResource = recipeForm.get();
         }
-        Recipe recipe = Recipe.findByName(recipeResource.getName());
+        /*Recipe recipe = Recipe.findByName(recipeResource.getName());
         if(recipe != null) {
             return Results.badRequest("Esta receta ya existe por lo que no puede ser creada nuevamente");
-        }
-        recipe = recipeResource.toModel();
+        }*/
+        Recipe recipe = recipeResource.toModel();
         recipe.save();
 
         return Results.created("La receta ha sido creada");
@@ -57,6 +57,7 @@ public class RecipeController extends Controller {
                             recipeResource.getIngredients(),
                             recipeResource.getCategories(),
                             recipeResource.getType(),
+                            recipeResource.getTime(),
                             recipeResource.getDescription()))
                     .as("application/xml");
         } else {
@@ -86,15 +87,17 @@ public class RecipeController extends Controller {
             Map<String, List<String>> ingredients = new LinkedHashMap<>();
             Map<String, List<String>> categories = new LinkedHashMap<>();
             Map<String, String> types = new LinkedHashMap<>();
+            Map<String, Integer> times = new LinkedHashMap<>();
             Map<String, String> descriptions = new LinkedHashMap<>();
             for (RecipeResource rp : resources) {
                 names.add(rp.getName());
                 ingredients.put(rp.getName(), rp.getIngredients());
                 categories.put(rp.getName(), rp.getCategories());
                 types.put(rp.getName(), rp.getType());
+                times.put(rp.getName(), rp.getTime());
                 descriptions.put(rp.getName(), rp.getDescription());
             }
-            res = Results.ok(views.xml.recipes.render(names, ingredients, categories, types, descriptions))
+            res = Results.ok(views.xml.recipes.render(names, ingredients, categories, types, times, descriptions))
                     .as("application/xml");
         } else {
             res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");

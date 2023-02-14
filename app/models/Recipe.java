@@ -20,8 +20,10 @@ public class Recipe extends BaseModel {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<Category> categories;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     private Type type;
+
+    private Integer time;
 
     private String description;
 
@@ -85,6 +87,14 @@ public class Recipe extends BaseModel {
 
     public void setType(Type type) {
         this.type = type;
+    }
+
+    public Integer getTime() {
+        return time;
+    }
+
+    public void setTime(Integer time) {
+        this.time = time;
     }
 
     public String getDescription() {

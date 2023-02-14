@@ -1,4 +1,4 @@
-@(names: List[String], ingredients: Map[String, List[String]], categories: Map[String, List[String]], types: Map[String, String], descriptions: Map[String, String])
+@(names: List[String], ingredients: Map[String, List[String]], categories: Map[String, List[String]], types: Map[String, String], times: Map[String, Integer], descriptions: Map[String, String])
 <?xml version="1.0" encoding="utf-8" ?>
 <recipes>
     @for(n <- names) {
@@ -15,6 +15,7 @@
                 }
             </categories>
             <type>@(types.get(n))</type>
+            <time>@(times.get(n))</time>
             <description>@(descriptions.get(n))</description>
         </recipe>
     }

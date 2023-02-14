@@ -15,12 +15,13 @@ public class TypeValidator extends Constraints.Validator<String> {
 
     @Override
     public boolean isValid(String value) {
-        for(Type.TypeEnum t : Type.TypeEnum.values()) {
+        /*for(Type.TypeEnum t : Type.TypeEnum.values()) {
             if(t.name().equals(value)) {
                 return true;
             }
         }
 
-        return false;
+        return false;*/
+        return Type.enumContains(value);
     }
 }

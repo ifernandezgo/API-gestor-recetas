@@ -1,17 +1,19 @@
 package models;
 
+import io.ebean.Finder;
 import io.ebean.annotation.EnumValue;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Type extends BaseModel {
 
-    @OneToOne(mappedBy = "type")
-    private Recipe recipe;
+    private static final Finder<Long, Type> find = new Finder<>(Type.class);
+
+    @OneToMany(cascade= CascadeType.ALL, mappedBy = "type")
+    private List<Recipe> recipes;
 
     @Enumerated(EnumType.STRING)
     private TypeEnum type;
@@ -37,12 +39,26 @@ public class Type extends BaseModel {
         return false;
     }
 
-    public Recipe getRecipe() {
-        return recipe;
+    public static Type findByName(String name) {
+        //Type.TypeEnum tEnum = Type.TypeEnum.valueOf(name);
+        return find.query().where().eq("type", name).findOne();
     }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
+    public void addRecipe(Recipe recipe) {
+        if(this.recipes == null) {
+            this.recipes = new ArrayList<>();
+        }
+
+        this.recipes.add(recipe);
+        recipe.setType(this);
+    }
+
+    public List<Recipe> getRecipes() {
+        return recipes;
+    }
+
+    public void setRecipes(List<Recipe> recipes) {
+        this.recipes = recipes;
     }
 
     public TypeEnum getType() {
