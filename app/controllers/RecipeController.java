@@ -2,6 +2,7 @@ package controllers;
 
 import models.Category;
 import models.Ingredient;
+import models.Type;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -36,6 +37,12 @@ public class RecipeController extends Controller {
         if(recipe != null) {
             return Results.badRequest("Esta receta ya existe por lo que no puede ser creada nuevamente");
         }*/
+        if(Type.findByName(recipeResource.getType()) == null) {
+            Type t = new Type();
+            Type.TypeEnum tEnum = Type.TypeEnum.valueOf(recipeResource.getType());
+            t.setType(tEnum);
+            t.save();
+        }
         Recipe recipe = recipeResource.toModel();
         recipe.save();
 

@@ -87,14 +87,7 @@ public class RecipeResource {
         }
 
         Type t = Type.findByName(this.type);
-        if(t == null) {
-            t = new Type();
-            Type.TypeEnum tEnum = Type.TypeEnum.valueOf(this.type);
-            t.setType(tEnum);
-            t.save();
-        }
         t.addRecipe(recipe);
-        System.out.println(recipe);
 
         return recipe;
     }
