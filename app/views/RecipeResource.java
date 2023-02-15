@@ -35,12 +35,13 @@ public class RecipeResource {
     @NotBlank(message = "Se debe indicar el tipo de comida que es la receta: (Desayuno, Comida o Cena)")
     private String type;
 
-    @JsonProperty("tyme")
+    @JsonProperty("time")
     @Constraints.Required
     @NotNull(message = "Se debe indicar el tiempo promedio de preparación de la receta")
     private Integer time;
 
     @JsonProperty("description")
+    @NotBlank(message = "La descripción de la receta no puede estar vacía")
     private String description;
 
     public RecipeResource()  {}
