@@ -2,54 +2,40 @@ package views;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import models.Category;
+import models.Ingredient;
+import models.Recipe;
+import models.Type;
 import play.libs.Json;
-import models.*;
-import play.data.validation.Constraints;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecipeResource {
+public class UpdateRecipeResource {
 
     @JsonProperty("id")
     private Long id;
-
     @JsonProperty("name")
-    @Constraints.Required
-    @Constraints.ValidateWith(RecipeValidator.class)
-    @NotBlank(message = "El nombre de la receta no puede estar vacío")
     private String name;
 
     @JsonProperty("ingredients")
-    @Constraints.Required
-    @NotEmpty(message = "La receta debe contener algún ingrediente")
     private List<String> ingredients;
 
     @JsonProperty("categories")
-    @NotEmpty(message = "La receta debe pertenecer a alguna categoría")
     private List<String> categories;
 
     @JsonProperty("type")
-    @Constraints.ValidateWith(TypeValidator.class)
-    @Constraints.Required
-    @NotBlank(message = "Se debe indicar el tipo de comida que es la receta: (Desayuno, Comida o Cena)")
     private String type;
 
     @JsonProperty("time")
-    @Constraints.Required
-    @NotNull(message = "Se debe indicar el tiempo promedio de preparación de la receta")
     private Integer time;
 
     @JsonProperty("description")
-    @NotBlank(message = "La descripción de la receta no puede estar vacía")
     private String description;
 
-    public RecipeResource()  {}
+    public UpdateRecipeResource() {}
 
-    public RecipeResource(Recipe recipe) {
+    public UpdateRecipeResource(Recipe recipe) {
         super();
         this.id = recipe.getId();
         this.name = recipe.getName();
@@ -66,6 +52,33 @@ public class RecipeResource {
         this.description = recipe.getDescription();
     }
 
+    public void completeResource(Recipe r) {
+        this.id = r.getId();
+        if(this.name == null) {
+            this.name = r.getName();
+        }
+        if(this.ingredients == null) {
+            this.ingredients = new ArrayList<>();
+            for(Ingredient i : r.getIngredients()) {
+                this.ingredients.add(i.getName());
+            }
+        }
+        if(this.categories == null) {
+            this.categories = new ArrayList<>();
+            for(Category c : r.getCategories()) {
+                this.categories.add(c.getName());
+            }
+        }
+        if(this.type == null) {
+            this.type = r.getType().getType().name();
+        }
+        if(this.time == null){
+            this.time = r.getTime();
+        }
+        if(this.description == null) {
+            this.description = r.getDescription();
+        }
+    }
     public Recipe toModel() {
         Recipe recipe = new Recipe();
 

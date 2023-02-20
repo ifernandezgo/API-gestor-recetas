@@ -12,6 +12,7 @@ import play.mvc.Result;
 import play.mvc.Results;
 import views.RecipeResource;
 import models.Recipe;
+import views.UpdateRecipeResource;
 
 
 import javax.inject.Inject;
@@ -129,20 +130,28 @@ public class RecipeController extends Controller {
             return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
         }
 
-        Form<RecipeResource> recipeForm = formFactory.form(RecipeResource.class).bindFromRequest(req);
+        Form<UpdateRecipeResource> recipeForm = formFactory.form(UpdateRecipeResource.class).bindFromRequest(req);
 
-        RecipeResource recipeResourceReq;
+        UpdateRecipeResource recipeResourceReq;
 
         if(recipeForm.hasErrors()) {
             return Results.badRequest(recipeForm.errorsAsJson());
         } else {
             recipeResourceReq = recipeForm.get();
         }
+        recipeResourceReq.completeResource(r);
+        if(!Type.enumContains(recipeResourceReq.getType())) {
+            return Results.badRequest("El tipo de la receta debe ser: Desayuno, Comida o Cena");
+        }
         Recipe recipeRequest = recipeResourceReq.toModel();
         if(!r.getName().equals(recipeRequest.getName())) {
-            r.setName(recipeRequest.getName());
+            if(Recipe.findByName(recipeRequest.getName()) != null) {
+                return Results.badRequest("No se puede actualizar el nombre porque ya existe una receta con ese mismo nombre");
+            } else {
+                r.setName(recipeRequest.getName());
+            }
         }
-        for(Ingredient i : recipeRequest.getIngredients()) {
+        /*for(Ingredient i : recipeRequest.getIngredients()) {
             if (!r.getIngredients().contains(i)) {
                 r.addIngredient(i);
             }
@@ -151,9 +160,18 @@ public class RecipeController extends Controller {
             if (!r.getCategories().contains(c)) {
                 r.addCategory(c);
             }
+        }*/
+        if(!r.getIngredients().equals(recipeRequest.getIngredients())) {
+            r.setIngredients(recipeRequest.getIngredients());
+        }
+        if(!r.getCategories().equals(recipeRequest.getCategories())) {
+            r.setCategories(recipeRequest.getCategories());
         }
         if(!r.getType().equals(recipeRequest.getType())){
             r.setType(recipeRequest.getType());
+        }
+        if(!r.getTime().equals(recipeRequest.getTime())){
+            r.setTime(recipeRequest.getTime());
         }
         if(!r.getDescription().equals(recipeRequest.getDescription())) {
             r.setDescription(recipeRequest.getDescription());
