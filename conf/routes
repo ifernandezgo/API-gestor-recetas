@@ -21,7 +21,7 @@ DELETE      /recipe/:id     controllers.RecipeController.deleteById(req: Request
 PUT     /recipe/:id     controllers.RecipeController.actualizarReceta(req: Request, id: Integer)
 
 #Obtener receta por los datos que se envíen
-GET     /recipe     controllers.RecipeController.searchRecipes(req: Request)
+GET     /recipeSearch     controllers.RecipeController.searchRecipes(req: Request)
 
 #Crear ingrediente
 POST        /ingredient     controllers.IngredientController.crearIngrediente(req: Request)

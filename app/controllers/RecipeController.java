@@ -12,6 +12,7 @@ import play.mvc.Result;
 import play.mvc.Results;
 import views.RecipeResource;
 import models.Recipe;
+import views.SearchRecipeResource;
 import views.UpdateRecipeResource;
 
 
@@ -182,6 +183,24 @@ public class RecipeController extends Controller {
     }
 
     public Result searchRecipes(Http.Request req) {
-        return Results.ok();
+
+        Form<SearchRecipeResource> recipeForm = formFactory.form(SearchRecipeResource.class).bindFromRequest(req);
+
+        SearchRecipeResource recipeResourceReq;
+        if(recipeForm.hasErrors()) {
+            return Results.badRequest(recipeForm.errorsAsJson());
+        } else {
+            recipeResourceReq = recipeForm.get();
+        }
+
+        List<Recipe> recipes = Recipe.searchRecipes(recipeResourceReq.getName(), recipeResourceReq.getIngredients(),
+                recipeResourceReq.getCategories(), recipeResourceReq.getType(), recipeResourceReq.getTime());
+
+        List<RecipeResource> resources = recipes.
+                stream().
+                map(RecipeResource::new).
+                collect(Collectors.toList());
+
+        return Results.ok(Json.toJson(resources)).as("application/json");
     }
 }

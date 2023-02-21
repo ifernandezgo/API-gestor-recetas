@@ -53,6 +53,16 @@ public class Recipe extends BaseModel {
         return find.query().where().eq("name", name).findOne();
     } 
 
+    public static List<Recipe> searchRecipes(String nameReq, List<String> ingredientsList, List<String> categoriesList, String typeName, Integer duration) {
+        System.out.println(ingredientsList.get(0));
+        Ingredient i = Ingredient.findByName(ingredientsList.get(0));
+        return find.query().
+                where().
+                in("ingredients", i).
+                //le("time", duration).
+                findList();
+    }
+
     public static List<Recipe> findAll() { return find.all(); }
 
     public static PagedList<Recipe> findAllPaged() { return find.query().where().setMaxRows(10).setFirstRow(0).findPagedList(); }
