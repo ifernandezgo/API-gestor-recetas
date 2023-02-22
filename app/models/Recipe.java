@@ -56,10 +56,21 @@ public class Recipe extends BaseModel {
     public static List<Recipe> searchRecipes(String nameReq, List<String> ingredientsList, List<String> categoriesList, String typeName, Integer duration) {
         System.out.println(ingredientsList.get(0));
         Ingredient i = Ingredient.findByName(ingredientsList.get(0));
+        List<Ingredient> ing = new ArrayList<>();
+        ing.add(i);
+        //Category c = Category.findByName(categoriesList.get(0));
+        //Category c = new Category();
+        if(categoriesList == null) { categoriesList = new ArrayList<>(); categoriesList.add(""); }
+        if(duration == null) { duration = Integer.MAX_VALUE; }
+        if(typeName == null) { typeName = "%"; }
+        if(nameReq == null) { nameReq = "%"; }
         return find.query().
                 where().
-                in("ingredients", i).
-                //le("time", duration).
+                like("name", nameReq).
+                in("ingredients.name", ingredientsList).
+                in("categories.name", categoriesList).
+                le("time", duration).
+                like("type.type", typeName).
                 findList();
     }
 

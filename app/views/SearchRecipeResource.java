@@ -6,6 +6,7 @@ import models.Category;
 import models.Ingredient;
 import models.Recipe;
 import models.Type;
+import play.data.validation.Constraints;
 import play.libs.Json;
 
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class SearchRecipeResource {
     private List<String> categories;
 
     @JsonProperty("type")
+    @Constraints.ValidateWith(TypeValidatorSearch.class)
     private String type;
 
     @JsonProperty("time")
