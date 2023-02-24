@@ -1,11 +1,16 @@
 package models;
 
+import io.ebean.Expr;
+import io.ebean.ExpressionList;
 import io.ebean.Finder;
 import io.ebean.PagedList;
+import io.ebeaninternal.server.util.Str;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Entity
 public class Recipe extends BaseModel {
@@ -54,24 +59,54 @@ public class Recipe extends BaseModel {
     } 
 
     public static List<Recipe> searchRecipes(String nameReq, List<String> ingredientsList, List<String> categoriesList, String typeName, Integer duration) {
-        System.out.println(ingredientsList.get(0));
-        Ingredient i = Ingredient.findByName(ingredientsList.get(0));
-        List<Ingredient> ing = new ArrayList<>();
-        ing.add(i);
-        //Category c = Category.findByName(categoriesList.get(0));
-        //Category c = new Category();
-        if(categoriesList == null) { categoriesList = new ArrayList<>(); categoriesList.add(""); }
-        if(duration == null) { duration = Integer.MAX_VALUE; }
-        if(typeName == null) { typeName = "%"; }
-        if(nameReq == null) { nameReq = "%"; }
-        return find.query().
-                where().
-                like("name", nameReq).
-                in("ingredients.name", ingredientsList).
-                in("categories.name", categoriesList).
-                le("time", duration).
-                like("type.type", typeName).
-                findList();
+
+        ExpressionList<Recipe> query = find.query().where();
+        /*Query q = find.createQuery(Recipe.class);
+        Junction<YourClass> junction;*/
+
+        query.eqIfPresent("name", nameReq);
+
+        if(ingredientsList != null) {
+            //System.out.println(ingredientsList.get(0) + " " + ingredientsList.get(1));
+            //query = query.eq("ingredients.name", ingredientsList.get(0)).eq("ingredients.name", ingredientsList.get(1));
+            //query.eq("ingredients.name", ingredientsList.get(0));//.eq("ingredients.name", ingredientsList.get(1));
+            //query = query.eq("ingredients.name", ingredientsList.get(1));
+            //query = query.where().contains("ingredients.name", ingredientsList.get(1));
+            //query.conjunction().eq("ingredients.name", ingredientsList.get(0)).and().eq("ingredients.name", ingredientsList.get(1)).endJunction();
+            Ingredient ing;
+            for(String i: ingredientsList) {
+                //ing = Ingredient.findByName(i);
+                query.eq("ingredients.name", i);
+                System.out.println(i);
+                System.out.println(query.findList().size());
+            }
+            /*Map<String, Object> map = new HashMap<>();
+            for(String i : ingredientsList) {
+                Ingredient ing = Ingredient.findByName(i);
+                map.put("ingredients", ing);
+            }
+            query.allEq(map);*/
+            //query.arrayContains("ingredients.name", ingredientsList);
+            //query.eq("ingredients.name", ingredientsList);
+            //query.add(Expr.contains("ingredients.name", ingredientsList.get(0)));
+            //query.add(Expr.contains("ingredients.name", ingredientsList.get(1)));
+        }
+
+        if(categoriesList != null) {
+            for(String c : categoriesList) {
+                System.out.println(c);
+                query.eq("categories.name", c);
+                System.out.println(query.findList().size());
+            }
+        }
+
+        query.eqIfPresent("type.type", typeName);
+
+        if(duration != null) {
+            query.le("time", duration);
+        }
+
+        return query.findList();
     }
 
     public static List<Recipe> findAll() { return find.all(); }
