@@ -61,25 +61,28 @@ public class Recipe extends BaseModel {
     public static List<Recipe> searchRecipes(String nameReq, List<String> ingredientsList, List<String> categoriesList, String typeName, Integer duration) {
 
         ExpressionList<Recipe> query = find.query().where();
-        /*Query q = find.createQuery(Recipe.class);
-        Junction<YourClass> junction;*/
 
         query.eqIfPresent("name", nameReq);
 
-        if(ingredientsList != null) {
+        query.inOrEmpty("ingredients.name", ingredientsList);
+
+        //if(ingredientsList != null) {
             //System.out.println(ingredientsList.get(0) + " " + ingredientsList.get(1));
             //query = query.eq("ingredients.name", ingredientsList.get(0)).eq("ingredients.name", ingredientsList.get(1));
             //query.eq("ingredients.name", ingredientsList.get(0));//.eq("ingredients.name", ingredientsList.get(1));
             //query = query.eq("ingredients.name", ingredientsList.get(1));
             //query = query.where().contains("ingredients.name", ingredientsList.get(1));
             //query.conjunction().eq("ingredients.name", ingredientsList.get(0)).and().eq("ingredients.name", ingredientsList.get(1)).endJunction();
-            Ingredient ing;
-            for(String i: ingredientsList) {
+            //Ingredient ing;
+            //query.multiMatch("ingredients.name", ingredientsList);
+            //query.in("ingredients.name", ingredientsList);
+            /*for(String i: ingredientsList) {
                 //ing = Ingredient.findByName(i);
-                query.eq("ingredients.name", i);
+                //query.in("ingredients.name", i);
+                //query.raw("ingredients.name = ?", i);
                 System.out.println(i);
                 System.out.println(query.findList().size());
-            }
+            }*/
             /*Map<String, Object> map = new HashMap<>();
             for(String i : ingredientsList) {
                 Ingredient ing = Ingredient.findByName(i);
@@ -90,15 +93,17 @@ public class Recipe extends BaseModel {
             //query.eq("ingredients.name", ingredientsList);
             //query.add(Expr.contains("ingredients.name", ingredientsList.get(0)));
             //query.add(Expr.contains("ingredients.name", ingredientsList.get(1)));
-        }
+        //}
 
-        if(categoriesList != null) {
+        query.inOrEmpty("categories.name", categoriesList);
+        /*if(categoriesList != null) {
             for(String c : categoriesList) {
                 System.out.println(c);
                 query.eq("categories.name", c);
                 System.out.println(query.findList().size());
             }
-        }
+            //query.inOrEmpty()
+        }*/
 
         query.eqIfPresent("type.type", typeName);
 
