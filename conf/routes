@@ -6,7 +6,7 @@
 #GET     /                           controllers.HomeController.index()
 
 #Crear una receta
-POST    /recipe     controllers.RecipeController.crearReceta(req: Request)
+POST    /recipe     controllers.RecipeController.createRecipe(req: Request)
 
 #Obtener una receta a través de su id
 GET     /recipe/:id     controllers.RecipeController.getRecetaById(req: Request, id: Integer)
@@ -18,7 +18,7 @@ GET     /recipes        controllers.RecipeController.getAllRecipes(req: Request)
 DELETE      /recipe/:id     controllers.RecipeController.deleteById(req: Request, id: Integer)
 
 #Actualizar receta
-PUT     /recipe/:id     controllers.RecipeController.actualizarReceta(req: Request, id: Integer)
+PUT     /recipe/:id     controllers.RecipeController.updateRecipe(req: Request, id: Integer)
 
 #Obtener receta por los datos que se envíen
 GET     /recipeSearch     controllers.RecipeController.searchRecipes(req: Request)
@@ -37,6 +37,9 @@ PUT     /ingredient/:id     controllers.IngredientController.updateIngredientByI
 
 #Obtener todos los ingredientes de la base de datos
 GET     /ingredients        controllers.IngredientController.getAllIngredients(req: Request)
+
+#Rellenar la base de datos para una demo
+GET     /recipes/createDemo     controllers.RecipeController.createDemo(req: Request)
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

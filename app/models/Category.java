@@ -5,6 +5,7 @@ import io.ebean.Finder;
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -24,6 +25,8 @@ public class Category extends BaseModel {
     public static Category findByName(String name) {
         return find.query().where().eq("name", name).findOne();
     }
+
+    public static List<Category> findAll()  { return find.all(); }
 
     public void addRecipe(Recipe recipe) {
         this.recipes.add(recipe);

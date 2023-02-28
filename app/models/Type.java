@@ -44,6 +44,8 @@ public class Type extends BaseModel {
         return find.query().where().eq("type", name).findOne();
     }
 
+    public static List<Type> findAll() { return find.all(); }
+
     public void addRecipe(Recipe recipe) {
         if(this.recipes == null) {
             this.recipes = new ArrayList<>();

@@ -1,0 +1,84 @@
+[
+    {
+        "name": "Tostada de mermelada",
+        "ingredients": [
+            "pan",
+            "mermelada"
+        ],
+        "categories": [
+            "proteina",
+            "hidratos"
+        ],
+        "type": "Desayuno",
+        "time": 2,
+        "description": "Cortar el pan y el añadir la mermelada encima"
+    },
+    {
+        "name": "Tostada de jamon",
+        "ingredients": [
+            "pan",
+            "jamon"
+        ],
+        "categories": [
+            "proteina",
+            "hidratos"
+        ],
+        "type": "Desayuno",
+        "time": 3,
+        "description": "Cortar el pan y el añadir el jamon encima"
+    },
+    {
+        "name": "Tortilla francesa",
+        "ingredients": [
+            "huevo"
+        ],
+        "categories": [
+            "proteina",
+            "vegetariana"
+        ],
+        "type": "Comida",
+        "time": 8,
+        "description": "Batir los huevos y freirlos en una sarten con un poco de aceite"
+    },
+    {
+        "name": "Tortilla de patata",
+        "ingredients": [
+            "huevo",
+            "patata"
+        ],
+        "categories": [
+            "proteina",
+            "vegetariana"
+        ],
+        "type": "Cena",
+        "time": 15,
+        "description": "Freir las patatas, batir los huevos y mezclarlo todo en la sartén"
+    },
+    {
+        "name": "Bocadillo jamon",
+        "ingredients": [
+            "pan",
+            "jamon"
+        ],
+        "categories": [
+            "proteina"
+        ],
+        "type": "Comida",
+        "time": 3,
+        "description": "Cortar un trozo de pan por la itad y añadir el jamon en el medio"
+    },
+    {
+        "name": "Bocadillo de jamon con tomate",
+        "ingredients": [
+            "pan",
+            "jamon",
+            "tomate"
+        ],
+        "categories": [
+            "proteina"
+        ],
+        "type": "Comida",
+        "time": 5,
+        "description": "Cortar un trozo de pan por la itad y añadir el jamon en el medio y añadir rodajas de tomate"
+    }
+]

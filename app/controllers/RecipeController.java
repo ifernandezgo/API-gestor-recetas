@@ -15,7 +15,6 @@ import models.Recipe;
 import views.SearchRecipeResource;
 import views.UpdateRecipeResource;
 
-
 import javax.inject.Inject;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -25,7 +24,7 @@ public class RecipeController extends Controller {
     @Inject
     private FormFactory formFactory;
 
-    public Result crearReceta(Http.Request req) {
+    public Result createRecipe(Http.Request req) {
         Form<RecipeResource> recipeForm = formFactory.form(RecipeResource.class).bindFromRequest(req);
 
         RecipeResource recipeResource = new RecipeResource();
@@ -124,7 +123,7 @@ public class RecipeController extends Controller {
         return Results.ok("La receta con id " + id + " ha sido eliminada correctamente");
     }
 
-    public Result actualizarReceta(Http.Request req, Integer id) {
+    public Result updateRecipe(Http.Request req, Integer id) {
 
         Recipe r = Recipe.findById(Long.valueOf(id));
         if(r == null) {
@@ -202,5 +201,29 @@ public class RecipeController extends Controller {
                 collect(Collectors.toList());
 
         return Results.ok(Json.toJson(resources)).as("application/json");
+    }
+
+    public Result createDemo(Http.Request req) {
+        //Vaciar la bd
+        this.emptyDb();
+
+        //Rellenar con los datos nuevos
+
+
+        return Results.ok();
+    }
+
+    public void emptyDb() {
+        List<Recipe> recipes = Recipe.findAll();
+        for(Recipe r : recipes) { r.delete(); }
+
+        List<Ingredient> ingredients = Ingredient.findAll();
+        for(Ingredient i : ingredients) { i.delete(); }
+
+        List<Category> categories = Category.findAll();
+        for(Category c : categories) { c.delete(); }
+
+        List<Type> types = Type.findAll();
+        for(Type t : types) { t.delete(); }
     }
 }

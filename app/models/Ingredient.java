@@ -5,6 +5,7 @@ import io.ebean.PagedList;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToMany;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -23,6 +24,8 @@ public class Ingredient extends BaseModel {
     }
 
     public static PagedList<Ingredient> findAllIngredientsPaged() { return find.query().where().setMaxRows(10).setFirstRow(0).findPagedList(); }
+
+    public static List<Ingredient> findAll() { return find.all(); }
 
     public static Ingredient findByName(String name) {
         return find.query().where().eq("name", name).findOne();
