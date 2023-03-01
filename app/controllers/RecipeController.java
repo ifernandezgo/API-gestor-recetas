@@ -3,6 +3,9 @@ package controllers;
 import models.Category;
 import models.Ingredient;
 import models.Type;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import play.data.Form;
 import play.data.FormFactory;
 import play.libs.Json;
@@ -14,8 +17,12 @@ import views.RecipeResource;
 import models.Recipe;
 import views.SearchRecipeResource;
 import views.UpdateRecipeResource;
+import org.json.simple.JSONObject;
 
 import javax.inject.Inject;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -203,14 +210,26 @@ public class RecipeController extends Controller {
         return Results.ok(Json.toJson(resources)).as("application/json");
     }
 
-    public Result createDemo(Http.Request req) {
+    public Result createDemo(Http.Request req) throws IOException, ParseException {
         //Vaciar la bd
         this.emptyDb();
 
         //Rellenar con los datos nuevos
+        Object o = new JSONParser().parse(new FileReader("./public/data.json"));
+        JSONArray data = (JSONArray) o;
+        for(int i = 0; i < data.size(); i++) {
+            RecipeResource rs = new RecipeResource((JSONObject) data.get(i));
+            if(Type.findByName(rs.getType()) == null) {
+                Type t = new Type();
+                Type.TypeEnum tEnum = Type.TypeEnum.valueOf(rs.getType());
+                t.setType(tEnum);
+                t.save();
+            }
+            Recipe recipe = rs.toModel();
+            recipe.save();
+        }
 
-
-        return Results.ok();
+        return Results.ok("Se han añadido " + data.size() + " recetas a la base de datos.");
     }
 
     public void emptyDb() {

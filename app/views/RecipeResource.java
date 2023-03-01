@@ -2,6 +2,8 @@ package views;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import play.libs.Json;
 import models.*;
 import play.data.validation.Constraints;
@@ -64,6 +66,25 @@ public class RecipeResource {
         this.type = recipe.getType().getType().name();
         this.time = recipe.getTime();
         this.description = recipe.getDescription();
+    }
+
+    public RecipeResource(JSONObject data) {
+        super();
+        this.name = data.get("name").toString();
+        this.ingredients = new ArrayList<>();
+        JSONArray ing = (JSONArray) data.get("ingredients");
+        for(Object i : ing) {
+            this.ingredients.add(i.toString());
+        }
+        System.out.println(this.ingredients.get(0));
+        this.categories = new ArrayList<>();
+        JSONArray cat = (JSONArray) data.get("categories");
+        for(Object c : cat) {
+            categories.add(c.toString());
+        }
+        this.type = data.get("type").toString();
+        this.time = Integer.valueOf(data.get("time").toString());
+        this.description = data.get("description").toString();
     }
 
     public Recipe toModel() {
