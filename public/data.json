@@ -7,7 +7,8 @@
         ],
         "categories": [
             "proteina",
-            "hidratos"
+            "hidratos",
+            "vegetariana"
         ],
         "type": "Desayuno",
         "time": 2,
@@ -61,11 +62,12 @@
             "jamon"
         ],
         "categories": [
-            "proteina"
+            "proteina",
+            "hidratos"
         ],
         "type": "Comida",
         "time": 3,
-        "description": "Cortar un trozo de pan por la itad y añadir el jamon en el medio"
+        "description": "Cortar un trozo de pan por la mitad y añadir el jamon en el medio"
     },
     {
         "name": "Bocadillo de jamon con tomate",
@@ -75,10 +77,61 @@
             "tomate"
         ],
         "categories": [
-            "proteina"
+            "proteina",
+            "hidratos"
         ],
         "type": "Comida",
         "time": 5,
-        "description": "Cortar un trozo de pan por la itad y añadir el jamon en el medio y añadir rodajas de tomate"
+        "description": "Cortar un trozo de pan por la mitad y añadir el jamon en el medio y añadir rodajas de tomate"
+    },
+    {
+        "name": "Arroz a la cubana",
+        "ingredients": [
+            "arroz",
+            "huevo"
+        ],
+        "categories": [
+            "proteina",
+            "vegetariana",
+            "hidratos"
+        ],
+        "type": "Comida",
+        "time": 15,
+        "description": "Hacer el arroz, freir los huevos y servirlo junto"
+    },
+    {
+        "name": "Ensalada",
+        "ingredients": [
+            "lechuga",
+            "zanahoria",
+            "tomate",
+            "aceite",
+            "vinagre",
+            "sal"
+        ],
+        "categories": [
+            "vegetariana",
+            "vegana"
+        ],
+        "type": "Cena",
+        "time": 10,
+        "description": "Juntar todos los ingredientes en una ensaladera y aliñarlos con el aceite, vingare y sal"
+    },
+    {
+        "name": "Ensalada mixta",
+        "ingredients": [
+            "lechuga",
+            "atun",
+            "tomate",
+            "aceite",
+            "vinagre",
+            "sal"
+        ],
+        "categories": [
+            "vegetariana"
+        ],
+        "type": "Cena",
+        "time": 10,
+        "description": "Juntar todos los ingredientes en una ensaladera y aliñarlos con el aceite, vingare y sal"
     }
 ]
