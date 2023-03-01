@@ -76,7 +76,6 @@ public class RecipeResource {
         for(Object i : ing) {
             this.ingredients.add(i.toString());
         }
-        System.out.println(this.ingredients.get(0));
         this.categories = new ArrayList<>();
         JSONArray cat = (JSONArray) data.get("categories");
         for(Object c : cat) {
