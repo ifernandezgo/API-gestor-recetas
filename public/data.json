@@ -133,5 +133,46 @@
         "type": "Cena",
         "time": 10,
         "description": "Juntar todos los ingredientes en una ensaladera y aliñarlos con el aceite, vingare y sal"
+    },
+    {
+        "name": "Filetes de merluza",
+        "ingredients": [
+            "merluza"
+        ],
+        "categories": [
+            "proteina"
+        ],
+        "type": "Cena",
+        "time": 15,
+        "description": "Cortar la merluza en forma de filetes y freírlos en la sartén con un poco de aceite"
+    },
+    {
+        "name": "Pasta con tomate frito",
+        "ingredients": [
+            "pasta",
+            "tomate frito"
+        ],
+        "categories": [
+            "hidratos",
+            "vegetariana",
+            "vegana"
+        ],
+        "type": "Comida",
+        "time": 12,
+        "description": "Cocer la pasta en una olla y añadirle tomate frito una vez esté cocida"
+    },
+    {
+        "name": "Puré de patata",
+        "ingredients": [
+            "patata",
+            "leche"
+        ],
+        "categories": [
+            "hidratos",
+            "lacteos"
+        ],
+        "type": "Comida",
+        "time": 20,
+        "description": "Cocer las patatas, triturarlas, añadirle la leche y calentarlas en la olla"
     }
 ]
