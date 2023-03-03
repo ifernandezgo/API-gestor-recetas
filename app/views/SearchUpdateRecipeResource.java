@@ -6,12 +6,13 @@ import models.Category;
 import models.Ingredient;
 import models.Recipe;
 import models.Type;
+import play.data.validation.Constraints;
 import play.libs.Json;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class UpdateRecipeResource {
+public class SearchUpdateRecipeResource {
 
     @JsonProperty("id")
     private Long id;
@@ -25,6 +26,7 @@ public class UpdateRecipeResource {
     private List<String> categories;
 
     @JsonProperty("type")
+    @Constraints.ValidateWith(TypeValidatorSearch.class)
     private String type;
 
     @JsonProperty("time")
@@ -33,9 +35,10 @@ public class UpdateRecipeResource {
     @JsonProperty("description")
     private String description;
 
-    public UpdateRecipeResource() {}
 
-    public UpdateRecipeResource(Recipe recipe) {
+    public SearchUpdateRecipeResource() {}
+
+    public SearchUpdateRecipeResource(Recipe recipe) {
         super();
         this.id = recipe.getId();
         this.name = recipe.getName();
@@ -79,6 +82,7 @@ public class UpdateRecipeResource {
             this.description = r.getDescription();
         }
     }
+
     public Recipe toModel() {
         Recipe recipe = new Recipe();
 

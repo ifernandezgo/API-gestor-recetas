@@ -1,22 +1,23 @@
-@(names: List[String], ingredients: Map[String, List[String]], categories: Map[String, List[String]], types: Map[String, String], times: Map[String, Integer], descriptions: Map[String, String])
+@(ids: List[Integer], names: Map[Integer, String], ingredients: Map[Integer, List[String]], categories: Map[Integer, List[String]], types: Map[Integer, String], times: Map[Integer, Integer], descriptions: Map[Integer, String])
 <?xml version="1.0" encoding="utf-8" ?>
 <recipes>
-    @for(n <- names) {
+    @for(id <- ids) {
         <recipe>
-            <name>@(n)</name>
+            <id>@(id)</id>
+            <name>@(names.get(id))</name>
             <ingredients>
-                @for(i <- ingredients.get(n)) {
+                @for(i <- ingredients.get(id)) {
                     <ingredient>@(i)</ingredient>
                 }
             </ingredients>
             <categories>
-                @for(c <- categories.get(n)) {
+                @for(c <- categories.get(id)) {
                     <category>@(c)</category>
                 }
             </categories>
-            <type>@(types.get(n))</type>
-            <time>@(times.get(n))</time>
-            <description>@(descriptions.get(n))</description>
+            <type>@(types.get(id))</type>
+            <time>@(times.get(id))</time>
+            <description>@(descriptions.get(id))</description>
         </recipe>
     }
 </recipes>

@@ -1,6 +1,7 @@
-@(name: String, ingredients: List[String], categories: List[String], t: String, time: Integer, description: String)
+@(id: Integer, name: String, ingredients: List[String], categories: List[String], t: String, time: Integer, description: String)
 <?xml version="1.0" encoding="utf-8" ?>
 <recipe>
+    <id>@(id)</id>
     <name>@(name)</name>
     <ingredients>
         @for(i <- ingredients) {

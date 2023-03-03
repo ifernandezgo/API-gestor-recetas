@@ -30,18 +30,14 @@ public class Recipe extends BaseModel {
     private String description;
 
     public void addIngredient(Ingredient ingredient) {
-        if(this.ingredients == null) {
-            this.ingredients = new ArrayList<>();
-        }
+        if(this.ingredients == null) { this.ingredients = new ArrayList<>(); }
 
         this.ingredients.add(ingredient);
         ingredient.addRecipe(this);
     }
 
     public void addCategory(Category category) {
-        if(this.categories == null) {
-            this.categories = new ArrayList<>();
-        }
+        if(this.categories == null) { this.categories = new ArrayList<>(); }
 
         this.categories.add(category);
         category.addRecipe(this);
@@ -57,58 +53,19 @@ public class Recipe extends BaseModel {
 
     public static List<Recipe> searchRecipes(String nameReq, List<String> ingredientsList, List<String> categoriesList, String typeName, Integer duration) {
 
-        ExpressionList<Recipe> query = find.query().where();
+        ExpressionList<Recipe> query = find.query().where().setMaxRows(10).setFirstRow(0);
 
         query.eqIfPresent("name", nameReq);
 
         query.inOrEmpty("ingredients.name", ingredientsList);
 
-        //if(ingredientsList != null) {
-            //System.out.println(ingredientsList.get(0) + " " + ingredientsList.get(1));
-            //query = query.eq("ingredients.name", ingredientsList.get(0)).eq("ingredients.name", ingredientsList.get(1));
-            //query.eq("ingredients.name", ingredientsList.get(0));//.eq("ingredients.name", ingredientsList.get(1));
-            //query = query.eq("ingredients.name", ingredientsList.get(1));
-            //query = query.where().contains("ingredients.name", ingredientsList.get(1));
-            //query.conjunction().eq("ingredients.name", ingredientsList.get(0)).and().eq("ingredients.name", ingredientsList.get(1)).endJunction();
-            //Ingredient ing;
-            //query.multiMatch("ingredients.name", ingredientsList);
-            //query.in("ingredients.name", ingredientsList);
-            /*for(String i: ingredientsList) {
-                //ing = Ingredient.findByName(i);
-                //query.in("ingredients.name", i);
-                //query.raw("ingredients.name = ?", i);
-                System.out.println(i);
-                System.out.println(query.findList().size());
-            }*/
-            /*Map<String, Object> map = new HashMap<>();
-            for(String i : ingredientsList) {
-                Ingredient ing = Ingredient.findByName(i);
-                map.put("ingredients", ing);
-            }
-            query.allEq(map);*/
-            //query.arrayContains("ingredients.name", ingredientsList);
-            //query.eq("ingredients.name", ingredientsList);
-            //query.add(Expr.contains("ingredients.name", ingredientsList.get(0)));
-            //query.add(Expr.contains("ingredients.name", ingredientsList.get(1)));
-        //}
-
         query.inOrEmpty("categories.name", categoriesList);
-        /*if(categoriesList != null) {
-            for(String c : categoriesList) {
-                System.out.println(c);
-                query.eq("categories.name", c);
-                System.out.println(query.findList().size());
-            }
-            //query.inOrEmpty()
-        }*/
 
         query.eqIfPresent("type.type", typeName);
 
-        if(duration != null) {
-            query.le("time", duration);
-        }
+        if(duration != null) { query.le("time", duration); }
 
-        return query.findList();
+        return query.findPagedList().getList();
     }
 
     public static List<Recipe> findAll() { return find.all(); }
