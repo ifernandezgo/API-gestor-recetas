@@ -169,9 +169,9 @@ public class RecipeController extends Controller {
         //Rellenar con los datos nuevos
         Object o = new JSONParser().parse(new FileReader("./public/data.json"));
         JSONArray data = (JSONArray) o;
-        for(int i = 0; i < data.size(); i++) {
-            RecipeResource rs = new RecipeResource((JSONObject) data.get(i));
-            if(Type.findByName(rs.getType()) == null) {
+        for (Object obj : data) {
+            RecipeResource rs = new RecipeResource((JSONObject) obj);
+            if (Type.findByName(rs.getType()) == null) {
                 Type t = new Type();
                 Type.TypeEnum tEnum = Type.TypeEnum.valueOf(rs.getType());
                 t.setType(tEnum);
