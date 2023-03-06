@@ -1,0 +1,18 @@
+@(id: Integer, name: String, ingredients: List[String], categories: List[String], t: String, time: Integer, description: String)
+<recipe>
+    <id>@(id)</id>
+    <name>@(name)</name>
+    <ingredients>
+        @for(i <- ingredients) {
+            <ingredient>@(i)</ingredient>
+        }
+    </ingredients>
+    <categories>
+        @for(c <- categories) {
+            <category>@(c)</category>
+        }
+    </categories>
+    <type>@(t)</type>
+    <time>@(time)</time>
+    <description>@(description)</description>
+</recipe>

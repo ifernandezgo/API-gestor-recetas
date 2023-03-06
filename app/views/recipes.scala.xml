@@ -2,22 +2,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <recipes>
     @for(id <- ids) {
-        <recipe>
-            <id>@(id)</id>
-            <name>@(names.get(id))</name>
-            <ingredients>
-                @for(i <- ingredients.get(id)) {
-                    <ingredient>@(i)</ingredient>
-                }
-            </ingredients>
-            <categories>
-                @for(c <- categories.get(id)) {
-                    <category>@(c)</category>
-                }
-            </categories>
-            <type>@(types.get(id))</type>
-            <time>@(times.get(id))</time>
-            <description>@(descriptions.get(id))</description>
-        </recipe>
+        @recipe_template(id, names.get(id), ingredients.get(id), categories.get(id), types.get(id), times.get(id), descriptions.get(id))
     }
 </recipes>
