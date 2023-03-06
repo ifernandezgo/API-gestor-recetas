@@ -8,12 +8,13 @@ import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
-import scala.Int;
 import views.IngredientResource;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class IngredientController extends Controller {
@@ -21,7 +22,7 @@ public class IngredientController extends Controller {
     @Inject
     private FormFactory formFactory;
 
-    public Result crearIngrediente(Http.Request req) {
+    public Result createIngredient(Http.Request req) {
         Form<IngredientResource> ingredientForm = formFactory.form(IngredientResource.class).bindFromRequest(req);
 
         IngredientResource ingredientResource = new IngredientResource();
@@ -38,7 +39,17 @@ public class IngredientController extends Controller {
         ingredient = ingredientResource.toModel();
         ingredient.save();
 
-        return Results.created("El ingrediente ha sido creado de forma correcta");
+        Result res;
+        ingredientResource = new IngredientResource(ingredient);
+        if (req.accepts("application/json")) {
+            res = Results.created(ingredientResource.toJson()).as("application/json");
+        } else if (req.accepts("application/xml")) {
+            res = Results.created(views.xml.ingredient.render(ingredientResource.getId().intValue(), ingredientResource.getName())).as("application/xml");
+        } else {
+            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+        }
+
+        return res;
     }
 
     public Result getIngredientById(Http.Request req, Integer id) {
@@ -52,7 +63,7 @@ public class IngredientController extends Controller {
         if (req.accepts("application/json")) {
             res = Results.ok(ingredientResource.toJson()).as("application/json");
         } else if (req.accepts("application/xml")) {
-            res = Results.ok(views.xml.ingredient.render(ingredientResource.getName())).as("application/xml");
+            res = Results.ok(views.xml.ingredient.render(ingredientResource.getId().intValue(), ingredientResource.getName())).as("application/xml");
         } else {
             res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
         }
@@ -92,12 +103,23 @@ public class IngredientController extends Controller {
 
         i.setName(ingredientResource.getName());
         i.update();
-        return Results.ok("El ingrediente se ha actualizado de forma correcta");
+
+        Result res;
+        ingredientResource = new IngredientResource(i);
+        if (req.accepts("application/json")) {
+            res = Results.ok(ingredientResource.toJson()).as("application/json");
+        } else if (req.accepts("application/xml")) {
+            res = Results.ok(views.xml.ingredient.render(ingredientResource.getId().intValue(), ingredientResource.getName())).as("application/xml");
+        } else {
+            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+        }
+
+        return res;
 
     }
 
     public Result getAllIngredients(Http.Request req) {
-        List<Ingredient> ingredients = Ingredient.findAllIngredientsPaged().getList();
+        List<Ingredient> ingredients = Ingredient.findAllPaged();
         if(ingredients.size() == 0) {
             return Results.notFound("Todavía no hay ningún ingrediente en la base de datos");
         }
@@ -112,11 +134,14 @@ public class IngredientController extends Controller {
         if(req.accepts("application/json")) {
             res = Results.ok(Json.toJson(resources)).as("application/json");
         } else if(req.accepts("application/xml")) {
-            List<String> names = new ArrayList<>();
+            List<Integer> ids = new ArrayList<>();
+            Map<Integer, String> names = new LinkedHashMap<>();
             for(IngredientResource ing: resources) {
-                names.add(ing.getName());
+                Integer id = ing.getId().intValue();
+                ids.add(id);
+                names.put(id, ing.getName());
             }
-            res = Results.ok(views.xml.ingredients.render(names)).as("application/xml");
+            res = Results.ok(views.xml.ingredients.render(ids, names)).as("application/xml");
         } else {
             res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
         }

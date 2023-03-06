@@ -13,6 +13,9 @@ import java.util.Set;
 
 public class IngredientResource {
 
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("ingredient")
     @NotBlank(message = "El nombre del ingrediente no puede estar vacío")
     @Constraints.Required
@@ -25,6 +28,7 @@ public class IngredientResource {
 
     public IngredientResource(Ingredient ingredient) {
         super();
+        this.id = ingredient.getId();
         this.name = ingredient.getName();
         this.recipes = ingredient.getRecipes();
     }
@@ -33,11 +37,20 @@ public class IngredientResource {
         Ingredient ingredient = new Ingredient();
 
         ingredient.setName(this.name);
+        if(this.recipes != null) { ingredient.setRecipes(this.recipes); };
 
         return ingredient;
     }
 
     public JsonNode toJson() { return Json.toJson(this); }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getName() {
         return name;

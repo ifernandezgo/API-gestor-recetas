@@ -23,9 +23,9 @@ public class Ingredient extends BaseModel {
         return find.byId(id);
     }
 
-    public static PagedList<Ingredient> findAllIngredientsPaged() { return find.query().where().setMaxRows(10).setFirstRow(0).findPagedList(); }
-
     public static List<Ingredient> findAll() { return find.all(); }
+
+    public static List<Ingredient> findAllPaged() { return find.query().where().setMaxRows(10).setFirstRow(0).findPagedList().getList(); }
 
     public static Ingredient findByName(String name) {
         return find.query().where().eq("name", name).findOne();
