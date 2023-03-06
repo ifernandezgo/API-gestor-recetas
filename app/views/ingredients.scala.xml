@@ -1,7 +1,7 @@
-@(ingredients: List[String])
+@(ids: List[Integer], ingredients: Map[Integer, String])
 <?xml version="1.0" encoding="utf-8" ?>
 <ingredients>
-    @for(i <- ingredients) {
-        <ingredient>@(i)</ingredient>
+    @for(id <- ids) {
+        @ingredient_template(id, ingredients.get(id))
     }
 </ingredients>
