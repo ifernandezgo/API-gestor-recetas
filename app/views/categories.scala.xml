@@ -1,0 +1,7 @@
+@(ids: List[Integer], names: Map[Integer, String])
+<?xml version="1.0" encoding="utf-8" ?>
+<categories>
+    @for(id <- ids) {
+        @category_template(id, names.get(id))
+    }
+</categories>

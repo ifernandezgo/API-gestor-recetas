@@ -1,0 +1,5 @@
+@(id: Integer, name: String)
+<category>
+    <id>@(id)</id>
+    <name>@(name)</name>
+</category>

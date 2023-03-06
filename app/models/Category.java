@@ -27,15 +27,17 @@ public class Category extends BaseModel {
 
     public static List<Category> findAll()  { return find.all(); }
 
+    public static List<Category> findAllPaged() { return find.query().where().setMaxRows(10).setFirstRow(0).findPagedList().getList(); }
+
     public void addRecipe(Recipe recipe) {
         this.recipes.add(recipe);
     }
 
-    public Set<Recipe> getRecipe() {
+    public Set<Recipe> getRecipes() {
         return recipes;
     }
 
-    public void setRecipe(Set<Recipe> recipe) {
+    public void setRecipes(Set<Recipe> recipe) {
         this.recipes = recipe;
     }
 
