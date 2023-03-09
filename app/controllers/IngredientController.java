@@ -82,14 +82,14 @@ public class IngredientController extends Controller {
         Messages messages = messagesApi.preferred(req);
         Ingredient i = Ingredient.findById(Long.valueOf(id));
         if(i == null) {
-            return Results.notFound("ingredientNotFound");
+            return Results.notFound(messages.at("ingredientNotFound"));
         }
 
         if(i.getRecipes().size() != 0) {
-            return Results.forbidden("El ingrediente no puede ser eliminada porque pertenece a una o varias recetas");
+            return Results.forbidden(messages.at("ingredientIncorrectDelete"));
         } else {
             i.delete();
-            return Results.ok("El ingrediente con id " + id + " ha sido eliminada correctamente");
+            return Results.ok(messages.at("ingredientDeleted"));
         }
     }
 
@@ -97,7 +97,7 @@ public class IngredientController extends Controller {
         Messages messages = messagesApi.preferred(req);
         Ingredient i = Ingredient.findById(Long.valueOf(id));
         if(i == null) {
-            return Results.notFound("No existe ningún ingrediente con ese id en la base de datos. Pruebe con otro");
+            return Results.notFound(messages.at("ingredientNotFound"));
         }
 
         Form<IngredientResource> ingredientForm = formFactory.form(IngredientResource.class).bindFromRequest(req);
@@ -131,7 +131,7 @@ public class IngredientController extends Controller {
         Messages messages = messagesApi.preferred(req);
         List<Ingredient> ingredients = Ingredient.findAllPaged();
         if(ingredients.size() == 0) {
-            return Results.notFound("Todavía no hay ningún ingrediente en la base de datos");
+            return Results.notFound(messages.at("noIngredientsDB"));
         }
 
         List<IngredientResource> resources = ingredients.

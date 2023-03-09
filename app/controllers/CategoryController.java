@@ -40,7 +40,7 @@ public class CategoryController {
 
         Category category = Category.findByName(categoryResource.getName());
         if(category != null) {
-            return Results.badRequest("Esta categoría ya existe por lo que no puede ser creado nuevamente");
+            return Results.badRequest(messages.at("incorrectCategoryName"));
         }
         category = categoryResource.toModel();
         category.save();
@@ -62,7 +62,7 @@ public class CategoryController {
         Messages messages = messagesApi.preferred(req);
         Category c = Category.findById(Long.valueOf(id));
         if(c == null) {
-            return Results.notFound("No existe ninguna categoría con ese id en la base de datos. Pruebe con otra");
+            return Results.notFound(messages.at("categoryNotFound"));
         }
 
         Result res;
@@ -82,14 +82,14 @@ public class CategoryController {
         Messages messages = messagesApi.preferred(req);
         Category c = Category.findById(Long.valueOf(id));
         if(c == null) {
-            return Results.notFound("No existe ninguna categoría con ese id en la base de datos. Pruebe con otra");
+            return Results.notFound(messages.at("categoryNotFound"));
         }
 
         if(c.getRecipes().size() != 0) {
-            return Results.forbidden("La categoría no puede ser eliminada porque pertenece a una o varias recetas");
+            return Results.forbidden(messages.at("categoryIncorrectDelete"));
         } else {
             c.delete();
-            return Results.ok("La categoría con id " + id + " ha sido eliminada correctamente");
+            return Results.ok(messages.at("categoryDeleted"));
         }
     }
 
@@ -97,7 +97,7 @@ public class CategoryController {
         Messages messages = messagesApi.preferred(req);
         Category c = Category.findById(Long.valueOf(id));
         if(c == null) {
-            return Results.notFound("No existe ninguna categoría con ese id en la base de datos. Pruebe con otra");
+            return Results.notFound(messages.at("categoryNotFound"));
         }
 
         Form<CategoryResource> categoryForm = formFactory.form(CategoryResource.class).bindFromRequest(req);
@@ -129,7 +129,7 @@ public class CategoryController {
         Messages messages = messagesApi.preferred(req);
         List<Category> categories = Category.findAllPaged();
         if(categories == null) {
-            return Results.notFound("No hay ninguna categoría guardada en la base de datos");
+            return Results.notFound(messages.at("noCategoriesDB"));
         }
 
         Result res;
