@@ -15,13 +15,6 @@ public class TypeValidatorSearch extends Constraints.Validator<String> {
 
     @Override
     public boolean isValid(String value) {
-        /*for(Type.TypeEnum t : Type.TypeEnum.values()) {
-            if(t.name().equals(value)) {
-                return true;
-            }
-        }
-
-        return false;*/
         return value == null || Type.enumContains(value);
     }
 }
