@@ -1,0 +1,9 @@
+unsupportedMedia = Data can only be returned on json or xml format.
+createDemo = Number of recipes added to the database:
+recipeNotFound = There is no recipe with that id in the database. Try another.
+noRecipesDB = There are no recipes in the database.
+recipeDeleted = The recipe has been correctly deleted.
+incorrectType = Type can only be: Desayuno, Comida o Cena.
+incorrectRecipeName = Invalid name. There already exists a recipe with that name in the database.
+incorrectIngredientName = Invalid name. There already exists an ingredient with that name in the database.
+ingredientNotFound = There is no ingredient with that id in the database. Try another.

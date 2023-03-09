@@ -8,6 +8,8 @@ import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import play.data.Form;
 import play.data.FormFactory;
+import play.i18n.Messages;
+import play.i18n.MessagesApi;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -26,7 +28,11 @@ public class RecipeController extends Controller {
     @Inject
     private FormFactory formFactory;
 
+    @Inject
+    MessagesApi messagesApi;
+
     public Result createRecipe(Http.Request req) {
+        Messages messages = messagesApi.preferred(req);
         Form<RecipeResource> recipeForm = formFactory.form(RecipeResource.class).bindFromRequest(req);
 
         RecipeResource recipeResource = new RecipeResource();
@@ -60,45 +66,48 @@ public class RecipeController extends Controller {
                             recipeResource.getDescription()))
                     .as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;
     }
 
     public Result getRecetaById(Http.Request req, Integer id) {
+        Messages messages = messagesApi.preferred(req);
         Recipe r = Recipe.findById(Long.valueOf(id));
         if(r == null) {
-            return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
+            return Results.notFound(messages.at("recipeNotFound"));
         }
 
         return okResponseRecipe(req, r);
     }
 
     public Result getAllRecipes(Http.Request req) {
+        Messages messages = messagesApi.preferred(req);
         List<Recipe> recipes = Recipe.findAllPaged().getList();
         if(recipes.size() == 0) {
-            return Results.notFound("No hay ninguna receta guardada en la base de datos.");
+            return Results.notFound(messages.at("noRecipesDB"));
         }
 
         return okResponseListRecipes(req, recipes);
     }
 
     public Result deleteById(Http.Request req, Integer id) {
+        Messages messages = messagesApi.preferred(req);
         Recipe r = Recipe.findById(Long.valueOf(id));
         if(r == null) {
-            return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
+            return Results.notFound(messages.at("recipeNotFound"));
         }
 
         r.delete();
-        return Results.ok("La receta con id " + id + " ha sido eliminada correctamente");
+        return Results.ok(messages.at("recipeDeleted"));
     }
 
     public Result updateRecipe(Http.Request req, Integer id) {
-
+        Messages messages = messagesApi.preferred(req);
         Recipe r = Recipe.findById(Long.valueOf(id));
         if(r == null) {
-            return Results.notFound("No existe ninguna receta con ese id en la base de datos. Pruebe con otra.");
+            return Results.notFound(messages.at("recipeNotFound"));
         }
 
         Form<SearchUpdateRecipeResource> recipeForm = formFactory.form(SearchUpdateRecipeResource.class).bindFromRequest(req);
@@ -111,13 +120,10 @@ public class RecipeController extends Controller {
             recipeResourceReq = recipeForm.get();
         }
         recipeResourceReq.completeResource(r);
-        if(!Type.enumContains(recipeResourceReq.getType())) {
-            return Results.badRequest("El tipo de la receta debe ser: Desayuno, Comida o Cena");
-        }
         Recipe recipeRequest = recipeResourceReq.toModel();
         if(!r.getName().equals(recipeRequest.getName())) {
             if(Recipe.findByName(recipeRequest.getName()) != null) {
-                return Results.badRequest("No se puede actualizar el nombre porque ya existe una receta con ese mismo nombre");
+                return Results.badRequest(messages.at("incorrectRecipeName"));
             } else {
                 r.setName(recipeRequest.getName());
             }
@@ -143,7 +149,7 @@ public class RecipeController extends Controller {
     }
 
     public Result searchRecipes(Http.Request req) {
-
+        Messages messages = messagesApi.preferred(req);
         Form<SearchUpdateRecipeResource> recipeForm = formFactory.form(SearchUpdateRecipeResource.class).bindFromRequest(req);
 
         SearchUpdateRecipeResource recipeResourceReq;
@@ -160,6 +166,7 @@ public class RecipeController extends Controller {
     }
 
     public Result okResponseRecipe(Http.Request req, Recipe r) {
+        Messages messages = messagesApi.preferred(req);
         Result res;
         RecipeResource recipeResource = new RecipeResource(r);
         if(req.accepts("application/json")) {
@@ -175,14 +182,14 @@ public class RecipeController extends Controller {
                             recipeResource.getDescription()))
                     .as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;
     }
 
     public Result okResponseListRecipes(Http.Request req, List<Recipe> recipes) {
-
+        Messages messages = messagesApi.preferred(req);
         List<RecipeResource> resources = recipes.
                 stream().
                 map(RecipeResource::new).
@@ -213,7 +220,7 @@ public class RecipeController extends Controller {
             res = Results.ok(views.xml.recipes.render(ids, names, ingredients, categories, types, times, descriptions))
                     .as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
         return res;
     }

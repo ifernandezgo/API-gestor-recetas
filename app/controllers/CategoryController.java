@@ -3,6 +3,8 @@ package controllers;
 import models.Category;
 import play.data.Form;
 import play.data.FormFactory;
+import play.i18n.Messages;
+import play.i18n.MessagesApi;
 import play.libs.Json;
 import play.mvc.Http;
 import play.mvc.Result;
@@ -21,7 +23,11 @@ public class CategoryController {
     @Inject
     private FormFactory formFactory;
 
+    @Inject
+    MessagesApi messagesApi;
+
     public Result createCategory(Http.Request req) {
+        Messages messages = messagesApi.preferred(req);
         Form<CategoryResource> categroyForm = formFactory.form(CategoryResource.class).bindFromRequest(req);
 
         CategoryResource categoryResource = new CategoryResource();
@@ -46,13 +52,14 @@ public class CategoryController {
         } else if (req.accepts("application/xml")) {
             res = Results.created(views.xml.category.render(categoryResource.getId().intValue() ,categoryResource.getName())).as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;
     }
 
     public Result getCategoryById(Http.Request req, Integer id) {
+        Messages messages = messagesApi.preferred(req);
         Category c = Category.findById(Long.valueOf(id));
         if(c == null) {
             return Results.notFound("No existe ninguna categoría con ese id en la base de datos. Pruebe con otra");
@@ -65,13 +72,14 @@ public class CategoryController {
         } else if (req.accepts("application/xml")) {
             res = Results.ok(views.xml.category.render(categoryResource.getId().intValue(), categoryResource.getName())).as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;
     }
 
     public Result deleteCategoryById(Http.Request req, Integer id) {
+        Messages messages = messagesApi.preferred(req);
         Category c = Category.findById(Long.valueOf(id));
         if(c == null) {
             return Results.notFound("No existe ninguna categoría con ese id en la base de datos. Pruebe con otra");
@@ -86,6 +94,7 @@ public class CategoryController {
     }
 
     public Result updateCategoryById(Http.Request req, Integer id) {
+        Messages messages = messagesApi.preferred(req);
         Category c = Category.findById(Long.valueOf(id));
         if(c == null) {
             return Results.notFound("No existe ninguna categoría con ese id en la base de datos. Pruebe con otra");
@@ -110,13 +119,14 @@ public class CategoryController {
         } else if (req.accepts("application/xml")) {
             res = Results.ok(views.xml.category.render(categoryResource.getId().intValue(), categoryResource.getName())).as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;
     }
 
     public Result getAllCategories(Http.Request req) {
+        Messages messages = messagesApi.preferred(req);
         List<Category> categories = Category.findAllPaged();
         if(categories == null) {
             return Results.notFound("No hay ninguna categoría guardada en la base de datos");
@@ -140,7 +150,7 @@ public class CategoryController {
             }
             res = Results.ok(views.xml.categories.render(ids, names)).as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
         return res;
     }

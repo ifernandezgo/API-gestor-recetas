@@ -3,6 +3,8 @@ package controllers;
 import models.Ingredient;
 import play.data.Form;
 import play.data.FormFactory;
+import play.i18n.Messages;
+import play.i18n.MessagesApi;
 import play.libs.Json;
 import play.mvc.Controller;
 import play.mvc.Http;
@@ -22,7 +24,11 @@ public class IngredientController extends Controller {
     @Inject
     private FormFactory formFactory;
 
+    @Inject
+    MessagesApi messagesApi;
+
     public Result createIngredient(Http.Request req) {
+        Messages messages = messagesApi.preferred(req);
         Form<IngredientResource> ingredientForm = formFactory.form(IngredientResource.class).bindFromRequest(req);
 
         IngredientResource ingredientResource = new IngredientResource();
@@ -34,7 +40,7 @@ public class IngredientController extends Controller {
         }
         Ingredient ingredient = Ingredient.findByName(ingredientResource.getName());
         if(ingredient != null) {
-            return Results.badRequest("Este ingrediente ya existe por lo que no puede ser creado nuevamente");
+            return Results.badRequest(messages.at("incorrectIngredientName"));
         }
         ingredient = ingredientResource.toModel();
         ingredient.save();
@@ -46,16 +52,17 @@ public class IngredientController extends Controller {
         } else if (req.accepts("application/xml")) {
             res = Results.created(views.xml.ingredient.render(ingredientResource.getId().intValue(), ingredientResource.getName())).as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;
     }
 
     public Result getIngredientById(Http.Request req, Integer id) {
+        Messages messages = messagesApi.preferred(req);
         Ingredient i = Ingredient.findById(Long.valueOf(id));
         if(i == null) {
-            return Results.notFound("No existe ningún ingrediente con ese id en la base de datos. Pruebe con otro");
+            return Results.notFound(messages.at("ingredientNotFound"));
         }
 
         Result res;
@@ -65,16 +72,17 @@ public class IngredientController extends Controller {
         } else if (req.accepts("application/xml")) {
             res = Results.ok(views.xml.ingredient.render(ingredientResource.getId().intValue(), ingredientResource.getName())).as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;
     }
 
     public Result deleteIngredientById(Http.Request req, Integer id) {
+        Messages messages = messagesApi.preferred(req);
         Ingredient i = Ingredient.findById(Long.valueOf(id));
         if(i == null) {
-            return Results.notFound("No existe ningún ingrediente con ese id en la base de datos. Pruebe con otro");
+            return Results.notFound("ingredientNotFound");
         }
 
         if(i.getRecipes().size() != 0) {
@@ -86,6 +94,7 @@ public class IngredientController extends Controller {
     }
 
     public Result updateIngredientById(Http.Request req, Integer id) {
+        Messages messages = messagesApi.preferred(req);
         Ingredient i = Ingredient.findById(Long.valueOf(id));
         if(i == null) {
             return Results.notFound("No existe ningún ingrediente con ese id en la base de datos. Pruebe con otro");
@@ -111,7 +120,7 @@ public class IngredientController extends Controller {
         } else if (req.accepts("application/xml")) {
             res = Results.ok(views.xml.ingredient.render(ingredientResource.getId().intValue(), ingredientResource.getName())).as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;
@@ -119,6 +128,7 @@ public class IngredientController extends Controller {
     }
 
     public Result getAllIngredients(Http.Request req) {
+        Messages messages = messagesApi.preferred(req);
         List<Ingredient> ingredients = Ingredient.findAllPaged();
         if(ingredients.size() == 0) {
             return Results.notFound("Todavía no hay ningún ingrediente en la base de datos");
@@ -143,7 +153,7 @@ public class IngredientController extends Controller {
             }
             res = Results.ok(views.xml.ingredients.render(ids, names)).as("application/xml");
         } else {
-            res = Results.unsupportedMediaType("Solo podemos devolver los datos en formato json o xml");
+            res = Results.unsupportedMediaType(messages.at("unsupportedMedia"));
         }
 
         return res;

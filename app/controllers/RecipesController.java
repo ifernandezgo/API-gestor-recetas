@@ -8,19 +8,27 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import play.i18n.Messages;
+import play.i18n.MessagesApi;
 import play.mvc.Controller;
 import play.mvc.Http;
 import play.mvc.Result;
 import play.mvc.Results;
 import views.RecipeResource;
 
+import javax.inject.Inject;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
 
 public class RecipesController extends Controller {
 
+    @Inject
+    MessagesApi messagesApi;
+
     public Result createDemo(Http.Request req) throws IOException, ParseException {
+        Messages messages = messagesApi.preferred(req);
+
         //Vaciar la bd
         this.emptyDb();
 
@@ -39,7 +47,7 @@ public class RecipesController extends Controller {
             recipe.save();
         }
 
-        return Results.ok("Se han añadido " + data.size() + " recetas a la base de datos.");
+        return Results.created(messages.at("createDemo") + " " + data.size());
     }
 
     public void emptyDb() {
