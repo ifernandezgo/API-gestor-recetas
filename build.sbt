@@ -19,4 +19,4 @@ libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.4.5"
 
 libraryDependencies += "com.googlecode.json-simple" % "json-simple" % "1.1.1"
 
-//libraryDependencies ++= Seq(evolutions, jdbc)
+libraryDependencies ++= Seq(evolutions, jdbc)
