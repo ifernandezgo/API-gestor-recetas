@@ -174,5 +174,56 @@
         "type": "Comida",
         "time": 20,
         "description": "Cocer las patatas, triturarlas, añadirle la leche y calentarlas en la olla"
+    },
+    {
+        "name": "Ensalada de arroz",
+        "ingredients": [
+            "arroz",
+            "aceite",
+            "queso fresco",
+            "maíz"
+        ],
+        "categories": [
+            "proteina",
+            "lacteos",
+            "vegetariana"
+        ],
+        "type": "Comida",
+        "time": 30,
+        "description": "Cocer el arroz, dejarlo enfriar, añadirle el resto de ingredientes y aliñarlo con un poco de aceite"
+    },
+    {
+        "name": "Hamburguesa",
+        "ingredients": [
+            "pan",
+            "carne",
+            "queso",
+            "tomate",
+            "lechuga"
+        ],
+        "categories": [
+            "proteina",
+            "lacteos",
+            "hidratos"
+        ],
+        "type": "Cena",
+        "time": 12,
+        "description": "Freir la carne y añadirla al pan de hanburguesa junto con el queso, la lechuga y el tomate"
+    },
+    {
+        "name": "Filetes empanados",
+        "ingredients": [
+            "pan",
+            "pavo",
+            "harina",
+            "huevo"
+        ],
+        "categories": [
+            "hidratos",
+            "proteina"
+        ],
+        "type": "Comida",
+        "time": 20,
+        "description": "Batir los huevos y mezclarlos con el pan rallado y la harina, mojar los filetes en la mezcla resultante y freirlos"
     }
 ]
