@@ -8,6 +8,8 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import play.Environment;
+import play.api.data.Field;
 import play.i18n.Messages;
 import play.i18n.MessagesApi;
 import play.mvc.Controller;
@@ -17,14 +19,20 @@ import play.mvc.Results;
 import views.RecipeResource;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 public class RecipesController extends Controller {
 
     @Inject
     MessagesApi messagesApi;
+
+    @Inject
+    private Environment environment;
+
 
     public Result createDemo(Http.Request req) throws IOException, ParseException {
         Messages messages = messagesApi.preferred(req);
@@ -33,7 +41,9 @@ public class RecipesController extends Controller {
         this.emptyDb();
 
         //Rellenar con los datos nuevos
-        Object o = new JSONParser().parse(new FileReader("./public/data.json"));
+        File is = environment.getFile("data/data.json");
+        FileReader fr = new FileReader(is);
+        Object o = new JSONParser().parse(fr);
         JSONArray data = (JSONArray) o;
         for (Object obj : data) {
             RecipeResource rs = new RecipeResource((JSONObject) obj);
