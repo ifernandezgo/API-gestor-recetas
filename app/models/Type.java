@@ -40,8 +40,7 @@ public class Type extends BaseModel {
     }
 
     public static Type findByName(String name) {
-        //Type.TypeEnum tEnum = Type.TypeEnum.valueOf(name);
-        return find.query().where().eq("type", name).findOne();
+        return find.query().where().ieq("type", name).findOne();
     }
 
     public static List<Type> findAll() { return find.all(); }

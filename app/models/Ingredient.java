@@ -28,7 +28,7 @@ public class Ingredient extends BaseModel {
     public static List<Ingredient> findAllPaged() { return find.query().where().setMaxRows(10).setFirstRow(0).findPagedList().getList(); }
 
     public static Ingredient findByName(String name) {
-        return find.query().where().eq("name", name).findOne();
+        return find.query().where().ieq("name", name).findOne();
     }
 
     public Set<Recipe> getRecipes() {

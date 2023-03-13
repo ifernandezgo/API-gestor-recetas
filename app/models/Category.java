@@ -22,7 +22,7 @@ public class Category extends BaseModel {
     }
 
     public static Category findByName(String name) {
-        return find.query().where().eq("name", name).findOne();
+        return find.query().where().ieq("name", name).findOne();
     }
 
     public static List<Category> findAll()  { return find.all(); }
