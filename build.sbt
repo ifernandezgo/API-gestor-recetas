@@ -1,7 +1,7 @@
-name := """gestor-recetas"""
-organization := "com.example"
+name := """recipe-manager"""
+organization := "es.upsa.mimo"
 
-version := "1.0-SNAPSHOT"
+version := "1.0"
 
 lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
