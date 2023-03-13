@@ -1,0 +1,17 @@
+unsupportedMedia = Les données ne peuvent être renvoyées qu'au format json ou xml.
+createDemo = Nombre de recettes ajoutées à la base de données:
+recipeNotFound = Il n'y a pas de recette avec cet identifiant dans la base de données. Essaie un autre.
+noRecipesDB = Il n'y a pas de recette enregistrée dans la base de données.
+recipeDeleted = La recette a été supprimée avec succès.
+incorrectType = Le type de recette doit être: Desayuno, Comida ou Cena.
+incorrectRecipeName = Nom incorrect. Une recette portant ce nom existe déjà dans la base de données.
+incorrectIngredientName = Nom incorrect. Un ingrédient portant ce nom existe déjà dans la base de données.
+ingredientNotFound = Il n'y a aucun ingrédient avec cet identifiant dans la base de données. Essaie un autre.
+ingredientIncorrectDelete = L'ingrédient ne peut pas être supprimé car il appartient à une ou plusieurs recettes.
+ingredientDeleted = L'ingrédient a été supprimé avec succès.
+noIngredientsDB = Il n'y a pas d'ingrédients dans la base de données.
+incorrectCategoryName = Nom incorrect. Une catégorie portant ce nom existe déjà dans la base de données.
+categoryNotFound =  Il n'y a pas de catégorie avec cet identifiant dans la base de données. Essaie un autre.
+categoryIncorrectDelete = La catégorie ne peut pas être supprimée car elle appartient à une ou plusieurs recettes.
+categoryDeleted = La catégorie a été supprimée avec succès.
+noCategoriesDB = Il n'y a pas de catégorie dans la base de données.
